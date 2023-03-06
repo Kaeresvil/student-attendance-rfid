@@ -18,6 +18,7 @@
     </div>
 </template>
 <script>
+import { defineComponent, ref, onMounted, reactive } from 'vue'
     export default {
         name: "App",
         data() {z
