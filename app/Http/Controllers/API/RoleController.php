@@ -24,6 +24,9 @@ class RoleController extends Controller
 
 
         $role = new Role();
+        if( $request->description == 'user' || $request->description == 'User') {
+            $role->id = 2;
+        }
         $role->role_name = $request->role_name;
         $role->description = $request->description;      
          $role->save();

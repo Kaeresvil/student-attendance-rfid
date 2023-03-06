@@ -31,7 +31,7 @@
               <textarea class="form-control"  v-model="description" placeholder="Enter description"  style="height: 100px"></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-4 mb-4"> Add Post</button>
+                <button type="submit" class="btn btn-primary mt-4 mb-4"> Add Role</button>
 
             </form>
             

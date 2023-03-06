@@ -20,7 +20,7 @@
 <script>
     export default {
         name: "App",
-        data() {
+        data() {z
             return {
                 isLoggedIn: false,
             }

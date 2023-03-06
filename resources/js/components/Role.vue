@@ -4,6 +4,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 <strong>Deleted Successfully</strong>
             </div>
+      <div v-if="strError" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong>{{strError}}</strong>
+            </div>
 
 <div class="card">
     <div class="card-body">
@@ -100,7 +104,8 @@
                             this.roles.splice(i, 1);
                             existingObj.strSuccess = response.data.success;
                         }).catch(function(error) {
-                            console.log(error)
+                            
+                            existingObj.strError = "Cannot delete there is end user assinged to this role!"
                         });
                     }
                 });
