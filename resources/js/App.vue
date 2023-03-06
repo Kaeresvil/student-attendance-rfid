@@ -7,7 +7,7 @@
           <div class="navbar-nav mx-3" v-if="isLoggedIn">
                 <router-link to="/posts" class="nav-item nav-link">Posts</router-link>
                 <router-link to="/roles" class="nav-item nav-link">Roles</router-link>
-                 <router-link to="/users" class="nav-item nav-link">Employees</router-link>
+                 <router-link to="/users" class="nav-item nav-link">Employeesss</router-link>
                 <a class="nav-item nav-link text-warning " style="cursor: pointer; font-size: 16px; font-weight: 700; " @click="logout">Logout</a>
             </div>
 
