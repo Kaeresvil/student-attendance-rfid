@@ -39,6 +39,10 @@
                                 </div>
                             </div>
 
+                            <button class="btn btn-success" @click="system()">
+                                Attendance Stysem
+                                    </button>
+
 
                         </form>
                     </div>
@@ -50,6 +54,7 @@
 </template>
 
 <script>
+import axios from "../axios"
     export default {
         data() {
             return {
@@ -59,19 +64,21 @@
             }
         },
         methods: {
+            system (){
+                this.$router.push('/attendance')
+            },
+         
             handleSubmit(e) {
                 e.preventDefault()
                 if(this.password.length > 0) {
-                    this.$axios.get('/sanctum/csrf-cookie').then(response => {
-                        this.$axios.post('api/login', {
+                 axios.get('/sanctum/csrf-cookie').then(response => {
+                     axios.post('api/login', {
                             email: this.email,
                             password: this.password
                         })
                         .then(response => {
                             if (response.data.success) {
-                                this.$router.go('/posts')
-                                
-                                console.log(response.data.user)
+                                this.$router.go('/home')
                             } else {
                                 this.error = response.data.message
                             }
@@ -86,7 +93,7 @@
         
         beforeRouteEnter(to, from, next) {
             if (window.Laravel.isLoggedin) {
-                return next('posts');
+                return next('home');
             }
             next();
         }

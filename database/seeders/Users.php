@@ -17,17 +17,24 @@ class Users extends Seeder
      */
     public function run()
     {
+        DB::table('users')->delete();
         DB::table('users')->insert([
             'name' => 'Admin',
             'role_type_id' => '1',
             'email' => 'admin@gmail.com',
-            'password' => bcrypt('qwertyui'),
+            'password' => bcrypt('poiuy'),
         ]);
         DB::table('users')->insert([
-            'name' => 'user',
+            'name' => 'Teacher',
             'role_type_id' => '2',
-            'email' => 'user@gmail.com',
-            'password' => bcrypt('qwertyui'),
+            'email' => 'teacher@gmail.com',
+            'password' => bcrypt('poiuy'),
+        ]);
+        DB::table('users')->insert([
+            'name' => 'Head Teacher',
+            'role_type_id' => '2',
+            'email' => 'hteacher@gmail.com',
+            'password' => bcrypt('poiuy'),
         ]);
     }
 }

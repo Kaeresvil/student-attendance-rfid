@@ -15,14 +15,20 @@ class Roles extends Seeder
      */
     public function run()
     {
+        DB::table('roles')->delete();
         DB::table('roles')->insert([
             'role_name' => 'Admin',
-            'description' => 'Sample Admin',
+            'description' => 'Administrator have an access all features.',
 
         ]);
         DB::table('roles')->insert([
-            'role_name' => 'User',
-            'description' => 'Sample Users',
+            'role_name' => 'Teacher',
+            'description' => 'Teacher have an access to add events, students and view reports.',
+
+        ]);
+        DB::table('roles')->insert([
+            'role_name' => 'Head Teacher',
+            'description' => 'Head Teacher have an access only to view students attendance reports.',
 
         ]);
     }
