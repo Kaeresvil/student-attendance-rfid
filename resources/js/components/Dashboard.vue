@@ -9,7 +9,7 @@
                  <router-link to="/events" class="nav-item nav-link text-dark">Events</router-link>
                  <router-link to="/reports" class="nav-item nav-link text-dark">Reports</router-link>
                  <div class="dropdown">
-                <a class="nav-item nav-link text-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                <a  class="nav-item nav-link text-dark dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     User
                 </a>
 
@@ -42,15 +42,19 @@ props: {
         type: Boolean
     }
 },
+
 setup(props){
 
     const isLoggedIn = ref(false)
     const route = useRoute()
+    var self = this;
 
-    
     onMounted(() =>{
         isLoggedIn.value = window.window.Laravel.isLoggedin
     })
+    
+
+    
     const logout = (e)=>{
 
                 e.preventDefault()
@@ -67,6 +71,7 @@ setup(props){
                         console.error(error);
                     });
                 })
+
     }
     return {
         isLoggedIn,

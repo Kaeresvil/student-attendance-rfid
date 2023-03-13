@@ -16,7 +16,7 @@
                     <div class="d-flex justify-content-between ">
                                 <h5 class="card-title">Update User Information</h5>
                                 <div>
-                                    <button class="btn btn-success" type="button" @click="this.$router.push('/users')">Back</button>
+                                    <button class="mr-2 uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" type="button" @click="this.$router.push('/users')">Back</button>
                                 </div>
                             </div>
 
@@ -49,18 +49,12 @@
                             </div>
                             </div>
 
-
-                            <div class="form-group row mt-1 mb-0">
-                                <div class="col-md-8 offset-md-4 mt-2">
-                                    <button type="submit" class="btn btn-primary" @click="updateUser" >
-                                        Update User
-                                    </button>
+                            <div class="w-full flex justify-end">
+                                <div>
+                                    <button type="submit" @click="updateUser" class="mr-2 mt-2 uppercase shadow bg-blue-800 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded">Update Post</button>
                                 </div>
                             </div>
-
-                           
-
-
+                            
                         </form>
                     </div>
                 </div>

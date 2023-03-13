@@ -17,7 +17,7 @@
             <div class="d-flex justify-content-between pb-2 mb-2">
                 <h5 class="card-title">Users List</h5>
                 <div>
-                    <button class="btn btn-success" type="button" @click="this.$router.push('/user/add')">Create New User</button>
+                    <button class="block uppercase mx-auto shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" type="button" @click="this.$router.push('/user/add')">Create New User</button>
                 </div>
             </div>
             
@@ -94,12 +94,11 @@
                 });
     
     
-                     if (window.Laravel.isLoggedin) {
-              this.username = window.Laravel.user
-              if(window.Laravel.role_type != 1){
-                this.isAdmin = false
-              }
-              
+                    if (window.Laravel.isLoggedin) {
+                        this.username = window.Laravel.user
+                        if(window.Laravel.role_type != 1){
+                            this.isAdmin = false
+                        }
                 }
             },
             methods: {

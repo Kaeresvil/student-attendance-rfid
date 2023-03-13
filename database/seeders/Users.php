@@ -32,7 +32,7 @@ class Users extends Seeder
         ]);
         DB::table('users')->insert([
             'name' => 'Head Teacher',
-            'role_type_id' => '2',
+            'role_type_id' => '3',
             'email' => 'hteacher@gmail.com',
             'password' => bcrypt('poiuy'),
         ]);

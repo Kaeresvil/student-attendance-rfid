@@ -15,7 +15,7 @@
                     <div class="d-flex justify-content-between ">
                                 <h5 class="card-title">Create New User</h5>
                                 <div>
-                                    <button class="btn btn-success mr-2" type="button" @click="this.$router.push('/users')">Back</button>
+                                    <button class="block mr-2 uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" type="button" @click="this.$router.push('/users')">Back</button>
                                 </div>
                             </div>
 
@@ -72,13 +72,9 @@
                             </div>
                             </div>
 
-                        
-
-                            <div class="form-group row mt-1 mb-0">
-                                <div class="col-md-10 offset-md-10 mt-2">
-                                    <button type="submit" class="btn btn-primary" @click="handleSubmit">
-                                        Register
-                                    </button>
+                            <div class="w-full flex justify-end">
+                                <div>
+                                    <button type="submit" @click="handleSubmit" class="mr-2 mt-2 uppercase shadow bg-blue-800 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded">Register</button>
                                 </div>
                             </div>
 

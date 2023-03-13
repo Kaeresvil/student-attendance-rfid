@@ -5,7 +5,8 @@
             <div class="d-flex justify-content-between pb-2 mb-2">
                 <h5 class="card-title">Add New Role</h5>
                 <div>
-                    <router-link :to="{name: 'role'}" class="btn btn-success">Go Back</router-link>
+                    <!-- <router-link :to="{name: 'role'}" class="block uppercase mx-auto shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded">Go Back</router-link> -->
+                    <button class="block mr-2 uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" type="button" @click="this.$router.push('/roles')">Back</button>
                 </div>
             </div>
 
@@ -31,7 +32,11 @@
               <textarea class="form-control"  v-model="description" placeholder="Enter description"  style="height: 100px"></textarea>
                 </div>
 
-                <button type="submit" class="btn btn-primary mt-4 mb-4"> Add Role</button>
+                <div class="w-full flex justify-end">
+                    <div>
+                        <button type="submit" class="mr-2 mt-2 uppercase shadow bg-blue-800 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded">Add Role</button>
+                    </div>
+                </div>
 
             </form>
             

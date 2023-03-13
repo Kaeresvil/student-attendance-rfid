@@ -11,6 +11,7 @@ import EditRole from '../components/EditRole';
 import User from '../components/users/users.vue';
 import AddUser from '../components/AddUser';
 import EditUser from '../components/EditUser';
+import RegisterStudent from '../components/RegisterStudent';
 
 export const routes = [
     {
@@ -83,6 +84,11 @@ export const routes = [
                 name: 'edituser',
                 path: '/users/edit/:id',
                 component: EditUser
+            },
+            {
+                name: 'registerstudent',
+                path: '/students/register',
+                component: RegisterStudent
             },
         ]
     },

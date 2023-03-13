@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <title>{{env('APP_NAME')}}</title>
     <link href="{{ mix('css/app.css') }}" type="text/css" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
     @if (Auth::check())
