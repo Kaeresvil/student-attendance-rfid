@@ -25,6 +25,9 @@
         "vue-loader": "^17.0.0"
     },
     "dependencies": {
+        "@ant-design/icons-vue": "^6.1.0",
+        "ant-design-vue": "^3.2.15",
+        "sweetalert2": "^11.7.3",
         "vue": "^3.2.36",
         "vue-moment": "^4.1.0",
         "vue-router": "^4.0.13",

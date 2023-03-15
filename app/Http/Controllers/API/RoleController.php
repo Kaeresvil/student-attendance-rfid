@@ -8,10 +8,35 @@ use App\Models\Role;
 
 class RoleController extends Controller
 {
-    public function Rindex()
+    public function Rindex(Request $request)
     {
-        $roles = Role::all()->toArray();
-        return array_reverse($roles);
+        $params = $request->all();
+
+        $orderByColumn = 'updated_at';
+        $direction = 'DESC';
+        $limit = 15;
+        if (isset($params['limit'])) {
+            $limit = $params['limit'];
+        }
+        if (isset($params['search'])) {
+            $search = $params['search'];
+            $query = Role::where('role_name', 'LIKE', '%'.$search.'%')->orderBy($orderByColumn, $direction)->paginate($limit);
+        }else{
+            $query = Role::orderBy($orderByColumn, $direction)->paginate($limit);
+        }
+
+
+
+
+        return response()->json([
+            'message' => 'Successfully Created',
+            'data' => $query
+        ], 200);
+    }
+
+    public function getall(){
+        $grade = Role::all()->toArray();
+        return array_reverse($grade);
     }
 
     public function Radd(Request $request)
@@ -30,7 +55,7 @@ class RoleController extends Controller
         $role->role_name = $request->role_name;
         $role->description = $request->description;      
          $role->save();
-         return response()->json(['success'=> 'Post created successfully']);
+         return response()->json(['success'=> 'Role Created Successfully']);
     }
 
 
@@ -44,23 +69,19 @@ class RoleController extends Controller
 
     public function Rupdate($id, Request $request)
     {
+        $request->validate([
+            'role_name' => 'required','unique',
+            'description' => 'required',
+            
+        ]);
 
 
         $role = Role::find($id);
-        $role->role_name = $request->name;
+        $role->role_name = $request->role_name;
         $role->description = $request->description;
         $role->update();
 
-        $success = true;
-        $message = "Successfully Updated";
-        $status = 200;
-
-    $response = [
-        'success' => $success,
-        'message' => $message,
-        'status' => $status
-    ];
-    return response()->json($response);
+        return response()->json(['success'=> 'Role Updated Successfully']);
 
     }
 
@@ -71,7 +92,7 @@ class RoleController extends Controller
     {
         $user = Role::find($id);
         $user->delete();
-        return response()->json(['success'=> 'User deleted successfully']);
+        return response()->json(['success'=> 'Role Deleted Successfully']);
 
     }
 

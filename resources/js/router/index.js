@@ -5,13 +5,6 @@ import Login from '../pages/Login';
 import Attendance from '../components/attendance/Form';
 import Dashboard from '../components/Dashboard';
 
-import Roles from '../components/Role';
-import AddRole from '../components/AddRole';
-import EditRole from '../components/EditRole';
-import User from '../components/users/users.vue';
-import AddUser from '../components/AddUser';
-import EditUser from '../components/EditUser';
-import RegisterStudent from '../components/RegisterStudent';
 
 export const routes = [
     {
@@ -41,6 +34,17 @@ export const routes = [
                 component: ()=> import("../components/students/students.vue")
             },
             {
+                name: 'create-students',
+                path: '/create/students',
+                component: ()=> import("../components/students/Form.vue")
+            },
+            {
+                name: 'edit-students',
+                path: '/edit/students/:id',
+                component: ()=> import("../components/students/Form.vue"),
+                props:true
+            },
+            {
                 name: 'events',
                 path: '/events',
                 component: ()=> import("../components/events/events.vue")
@@ -56,40 +60,62 @@ export const routes = [
                 component: ()=> import("../components/roles/roles.vue")
             },
             {
-                name: 'role',
-                path: '/roles',
-                component: Roles
+                name: 'grades',
+                path: '/grades',
+                component: ()=> import("../components/grades/grades.vue")
             },
             {
-                name: 'addrole',
-                path: '/roles/add',
-                component: AddRole
+                name: 'create-grades',
+                path: '/create/grades',
+                component: ()=> import("../components/grades/Form.vue")
             },
             {
-                name: 'editrole',
-                path: '/roles/edit/:id',
-                component: EditRole
+                name: 'edit-grades',
+                path: '/edit/grades/:id',
+                component: ()=> import("../components/grades/Form.vue"),
+                props:true
+            },
+            {
+                name: 'create-sections',
+                path: '/create/sections',
+                component: ()=> import("../components/sections/Form.vue")
+            },
+            {
+                name: 'edit-sections',
+                path: '/edit/sections/:id',
+                component: ()=> import("../components/sections/Form.vue"),
+            },
+            {
+                name: 'sections',
+                path: '/sections',
+                component: ()=> import("../components/sections/sections.vue")
+            },
+            {
+                name: 'create-roles',
+                path: '/create/roles',
+                component: ()=> import("../components/roles/Form.vue")
+            },
+            {
+                name: 'edit-roles',
+                path: '/edit/roles/:id',
+                component: ()=> import("../components/roles/Form.vue"),
             },
             {
                 name: 'user',
                 path: '/users',
-                component: User
+                component: ()=> import("../components/users/users.vue")
             },
             {
-                name: 'adduser',
-                path: '/user/add',
-                component: AddUser
+                name: 'create-users',
+                path: '/create/users',
+                component: ()=> import("../components/users/Form.vue")
             },
             {
-                name: 'edituser',
-                path: '/users/edit/:id',
-                component: EditUser
+                name: 'edit-users',
+                path: '/edit/users/:id',
+                component: ()=> import("../components/users/Form.vue"),
             },
-            {
-                name: 'registerstudent',
-                path: '/students/register',
-                component: RegisterStudent
-            },
+           
         ]
     },
    

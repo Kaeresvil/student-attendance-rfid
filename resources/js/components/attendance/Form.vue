@@ -16,10 +16,12 @@ ar<template>
                      {{ continues_time}}
                     </div>
                     <div class="row justify-content-center">
-                        <select name="cars" id="cars" style="width: 90%;">
-                        <option value="volvo">Class Attendance</option>
-                        <option value="saab">Event Attendance</option>
-                        </select>
+                        <a-select style="width: 90%;" show-search v-model:value="form.grade_level_id" id="role_id">
+                                        <a-select-option v-for="grade in option_gradelevel" :key="grade.id" size="large">{{
+                                            grade.grade_level
+                                        }}
+                                        </a-select-option>
+                                        </a-select>
                     </div>
                     <div class="row selector">
                      
@@ -78,9 +80,9 @@ ar<template>
                     <div class="row justify-content-center">
                       <div style="background-color:#032b5e; color: white; text-align: center; width: 50%; margin-bottom: -13px;font-size: 16px;">STUDENT DETAILS</div>
                       <div style="border: 1px solid #032b5e; width: 90%; padding-top: 20px; margin-bottom: 5px;">
-                        <h5>Name: Kaeresvil O. Arellano</h5>
-                        <h5>Grade: 12</h5>
-                        <h5>Section: TVL-A</h5>
+                        <h2>Name: Kaeresvil O. Arellano</h2>
+                        <h2>Grade: 12</h2>
+                        <h2>Section: TVL-A</h2>
                       </div>
                     </div>
                     <div class="row justify-content-center">
@@ -115,8 +117,19 @@ setup(){
         section:"",
     })
  
+    const autofocusFields = (e)=>{
+        var el = document.getElementsByClassName("code")[0];
+        hideKeyboard(el);
+
+        function hideKeyboard(el) {
+        setTimeout(function() {
+            el.blur(); //close the keyboard
+            el.focus(); //focus on the input
+        }, 100);
+        }
+    }
     const onChangetimein = (e)=>{
-console.log(e)
+        autofocusFields()
     }
     const parseCode = (e)=>{
        
@@ -127,8 +140,9 @@ console.log(e)
         }, 1000)
         setTimeout(() => {
             visible_scanner.value = true
-            form.rfid_code = ""
-        }, 4000)
+            form.rfid_code = "",
+            autofocusFields()
+        }, 5000)
 console.log( e);
 
     }
@@ -140,15 +154,7 @@ console.log( e);
             continues_day.value =moment().format('dddd'); 
         }, 1000)
     //    document.getElementsByClassName('code')
-       var el = document.getElementsByClassName("code")[0];
-        hideKeyboard(el);
-
-        function hideKeyboard(el) {
-        setTimeout(function() {
-            el.blur(); //close the keyboard
-            el.focus(); //focus on the input
-        }, 100);
-        }
+    autofocusFields()
     })
     return {
         onChangetimein,

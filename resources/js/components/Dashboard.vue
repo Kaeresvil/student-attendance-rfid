@@ -10,12 +10,14 @@
                  <router-link to="/reports" class="nav-item nav-link text-dark">Reports</router-link>
                  <div class="dropdown">
                 <a  class="nav-item nav-link text-dark dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                    User
+                    Settings
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
                     <li> <router-link to="/users" class="dropdown-item">Users</router-link></li>
                     <li> <router-link to="/roles" class="dropdown-item">Roles</router-link></li>
+                    <li> <router-link to="/grades" class="dropdown-item">Grade Level</router-link></li>
+                    <li> <router-link to="/sections" class="dropdown-item">Sections</router-link></li>
                 </ul>
                 </div>
                 <a class="nav-item nav-link " style="cursor: pointer; font-size: 17px; font-weight: 900; " @click="logout">LOGOUT</a>

@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\RoleController;
+use App\Http\Controllers\API\GradeLevelController;
+use App\Http\Controllers\API\SectionController;
+use App\Http\Controllers\API\StudentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,26 +27,47 @@ use App\Http\Controllers\API\RoleController;
 
 Route::post('login', [UserController::class, 'login']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('attendance', [UserController::class, 'attendance']);
 
 Route::group(['prefix' => 'page','middleware' => 'auth:sanctum'], function() {
-    Route::get('posts', [PostController::class,'index']);
-    Route::post('add', [PostController::class,'add']);
-    Route::post('update/{id}', [PostController::class,'update']);
-    Route::get('edit/{id}', [PostController::class,'edit']);
-    Route::delete('delete/{id}', [PostController::class,'delete']);
 
-
+    /// routes for users
     Route::post('register', [UserController::class, 'register']);
     Route::get('users', [UserController::class,'Uindex']);
     Route::get('usersedit/{id}', [UserController::class,'Uedit']);
     Route::delete('usersdelete/{id}', [UserController::class,'Udelete']);
     Route::post('users/update/{id}', [UserController::class,'Uupdate']);
 
+    /// routes for student
+    Route::post('student/add', [StudentController::class, 'store']);
+    Route::get('student', [StudentController::class,'index']);
+    Route::get('studentedit/{id}', [StudentController::class,'show']);
+    Route::delete('studentdelete/{id}', [StudentController::class,'delete']);
+    Route::post('student/update/{id}', [StudentController::class,'update']);
 
 
+    /// routes for roles
     Route::get('roles', [RoleController::class,'Rindex']);
+    Route::get('allroles', [RoleController::class,'getall']);
     Route::post('role/add', [RoleController::class,'Radd']);
     Route::post('roleupdate/{id}', [RoleController::class,'Rupdate']);
     Route::get('roleedit/{id}', [RoleController::class,'Redit']);
     Route::delete('roledelete/{id}', [RoleController::class,'Rdelete']);
+
+    /// routes for grade level
+    Route::get('grade_level', [GradeLevelController::class,'index']);
+    Route::get('all_grade_level', [GradeLevelController::class,'getall']);
+    Route::post('grade_level/add', [GradeLevelController::class,'store']);
+    Route::get('grade_level_show/{id}', [GradeLevelController::class,'show']);
+    Route::post('grade_level_update/{id}', [GradeLevelController::class,'update']);
+    Route::delete('grade_level_delete/{id}', [GradeLevelController::class,'delete']);
+
+    /// routes for section
+    Route::get('section', [SectionController::class,'index']);
+    Route::get('all_section', [SectionController::class,'getall']);
+    Route::post('section/add', [SectionController::class,'store']);
+    Route::get('section_show/{id}', [SectionController::class,'show']);
+    Route::post('section_update/{id}', [SectionController::class,'update']);
+    Route::delete('section_delete/{id}', [SectionController::class,'delete']);
+
 });

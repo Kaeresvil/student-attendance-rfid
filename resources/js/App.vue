@@ -13,4 +13,29 @@
   margin-top: 9%;
 }
 
+.ant-table-row-cell-break-word{
+  padding: 0 !important;
+}
+
+.ant-table-small .ant-table-thead > tr > th {
+    background-color: #121212 !important;
+    color: white !important;
+}
+
+.ant-table-tbody > tr > td {
+    border: 1px solid #dcdcdc;
+
+}
+.card_form{
+  width: 70%;
+  margin: auto;
+}
+
+.buttonshow {
+  background-color: #3c8dbc !important;
+  border-color: #367fa9 !important;
+  color: white !important;
+}
+
+
 </style>

@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers\API;
+
+use App\Http\Controllers\Controller;
+use App\Models\GradeLevel;
+use Illuminate\Http\Request;
+
+class GradeLevelController extends Controller
+{
+
+
+    public function index(Request $request)
+    {
+        $params = $request->all();
+
+        $orderByColumn = 'updated_at';
+        $direction = 'DESC';
+        $limit = 15;
+        if (isset($params['limit'])) {
+            $limit = $params['limit'];
+        }
+        if (isset($params['search'])) {
+            $search = $params['search'];
+            $searchable = ['grade_level', 'description'];
+            $query = GradeLevel::where('grade_level', 'LIKE', '%'.$search.'%')->orderBy($orderByColumn, $direction)->paginate($limit);
+        }else{
+            $query = GradeLevel::orderBy($orderByColumn, $direction)->paginate($limit);
+        }
+
+
+
+
+        return response()->json([
+            'message' => 'Successfully Created',
+            'data' => $query
+        ], 200);
+    }
+
+    public function getall(){
+        $grade = GradeLevel::all()->toArray();
+        return array_reverse($grade);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'grade_level' => 'required',
+            'description' => 'required',
+        ]);
+
+        $input = $request->all();
+
+        GradeLevel::create($input);
+
+        return response()->json(['success'=> 'Grade Level Created Successfully']);
+
+    }
+
+    public function show($id)
+    {
+        $post = GradeLevel::find($id);
+        return response()->json($post);
+    }
+
+    public function update($id, Request $request)
+    {
+        $post = GradeLevel::find($id);
+        $request->validate([
+            'grade_level' => 'required',
+            'description' => 'required',
+        ]);
+
+        $input = $request->all();
+        $post->update($input);
+
+        return response()->json(['success'=> 'Grade Level Updated Successfully']);
+    }
+
+    public function delete($id)
+    {
+        $post = GradeLevel::find($id);
+        $post->delete();
+        return response()->json(['success'=> 'Grade Level Deleted Successfully']);
+
+    } 
+
+}
+

@@ -51,4 +51,9 @@ class User extends Authenticatable
         return $this->hasOne(Role::class,'id','role_type_id');
       
     }
+
+    public function sections()
+    {
+        return $this->hasManyThrough(Section::class, UserSection::class, 'user_id', 'id', 'id', 'section_id');
+    }
 }
