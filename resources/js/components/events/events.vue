@@ -1,30 +1,86 @@
 <template>
-     <div class="conrainer" style="margin:0 2% 0 2%;">
+    <div class="conrainer" style="margin:0 2% 0 2%;">
         <div class="card">
             <div class="card-body">
-                <div class="d-flex justify-content-between pb-2 mb-2">
-                    <h5 class="card-title">Users List</h5>
+                <div class="d-flex justify-content-between ">
+                    <h4 class="card-title my-auto" style="font-size: 15px; font-weight: bold; color: #312d2dd9;">Event List</h4>
                     <div>
-                        <button class="block uppercase mx-auto shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded">Create New Event</button>
+                        <button class="block uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" @click="this.$router.push('/create/events')">Add New Event</button>
                     </div>
                 </div>
+
+                <a-divider />
+
+                <a-row style="margin-bottom: 15px">
+                    <a-col class="search">
+                        <a-input-search
+                            placeholder="search"
+                            style="width: 300px"
+                            v-model:value="form.search"
+                            @input="
+                            debounce(() => {
+                                form.search = $event.target.value;
+                            })
+                            "
+                        />
+                    </a-col>
+                </a-row>
+
+                <a-table
+                    size="small"
+                    row-key="id"
+                    :columns="columns"
+                    :data-source="users.data"
+                    :pagination="false"
+                    :loading="loading"
+                    style="overflow-x: auto"
+                >
+
+                    <template v-slot:action="{ record }">
+                        <a-button
+                        class="buttonshow"
+                        @click="editRecord(record)"
+                        size="small"
+                        >
+                    View
+                        </a-button>
+                    </template>
+
+                    <template v-slot:grade="{ record }">
+                        <span>{{ record.section.grade_level.grade_level }}</span>
+                    </template>
+
+                    <template v-slot:section="{ record }">
+                        <span>{{ record.section.name }}</span>
+                    </template>
+
+                </a-table>
+
+
                 
-                <table class="table table-hover table-sm">
-                    <thead class="bg-dark text-light">
-                        <tr>
-                            <th width="50" class="text-center">#</th>
-                            <th>Event Name</th>
-                            <th>Date</th>
-                            <th>Description</th>
-                            <th class="text-center" width="200">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-  
-                        </tr>
-                    </tbody>
-                </table>
+            <a-row style="margin: 15px 15px" v-if="true">
+                <a-col class="search" span="24">
+                <div>
+                    <span
+                    >{{ users.from }} - {{ users.to }} of
+                    {{ users.total }}</span
+                    >
+                </div>
+                <div>
+                    <a-pagination
+                    size="small"
+                    :total="users.total"
+                    show-size-changer
+                    @change="onChange"
+                    @showSizeChange="onShowLimit"
+                    :current="form.page"
+                    :default-page-size="15"
+                    :page-size-options="['15', '30', '45', '60']"
+                    />
+                </div>
+                </a-col>
+            </a-row>
+
         
         
             </div>
@@ -32,5 +88,122 @@
     </div>
 </template>
 
+<script>
+import { defineComponent, ref, onMounted, reactive,toRefs } from 'vue';
+import axios from "../../axios"
+import { useRouter } from 'vue-router'
+
+export default defineComponent({
+components:{},
+setup(){
+    const users = ref([])
+    const loading = ref(true)
+    const router = useRouter()
+    const form = reactive({
+      page: 1,
+      limit: 15,
+      search: "",
+    });
+
+    const columns = [
+        {
+            title: 'Event Name',
+            dataIndex: 'event_name',
+        },
+        {
+            title: 'Event Date',
+            dataIndex: 'event_date',
+        },
+        {
+            title: 'Event Description',
+            dataIndex: 'event_description',
+        },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            slots: { customRender: 'action' },
+            align: 'center'
+        },
+        ];
+
+        const index = (payload = {page: 1}) => {
+            loading.value = true;
+                axios.get('/api/page/event', {params: {...payload}})
+                .then(response => {
+                    users.value = response.data.data;
+                    loading.value = false;
+                    console.log(response.data.data);
+                })
+                .catch(function(error) {
+                    
+                    console.log(error);
+                });
+        }
+
+        const onChange = (payload) => {
+        const { page } = toRefs(form);
+        page.value = payload;
+        filter(form);
+        };
+
+    const onShowLimit = (current, pageSize) => {
+      const { limit } = toRefs(form);
+      const { page } = toRefs(form);
+      page.value = 1;
+      limit.value = pageSize;
+      filter(form);
+    };
+
+    function createDebounce() {
+      let timeout = null;
+      return function (fnc, delayMs) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+          const { page } = toRefs(form);
+          page.value = 1;
+          filter(form);
+        }, delayMs || 500);
+      };
+    }
+        const filter = (payload) => {
+      index(payload)
+    }
+        const editRecord = (record) => {
+            router.push({path: '/edit/events/' + record.id,
+            query: {archive: 'false'}
+            })
+    }
+    onMounted(index)
+
+    return {
+        onChange,
+        onShowLimit,
+        debounce: createDebounce(),
+        editRecord,
+
+        form,
+        users,
+        loading,
+        columns
+    }
+}
+})
+
+   
+</script>
+
 <style scoped>
+.ant-table-small .ant-table-thead > tr > th {
+    background-color: #bb1111;
+}
+.search {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  align-content: space-between;
+}
+
+
+
 </style>

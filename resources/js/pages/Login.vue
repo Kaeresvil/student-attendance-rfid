@@ -11,6 +11,9 @@
                 </div>
                 
                 <div class="min-h-screen flex flex-col items-center justify-center bg-gray-300">
+                    <div class="mb-10">
+                        <img class="lg:w-56 lg:h-56 sm:w-32 sm:w-32 rounded-md overflow-hidden" src="/img/RFIDLOGO.png"/>
+                    </div>
                     <div class="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
                         <div class="">
                             <form>
@@ -62,40 +65,6 @@
                                 <span class="ml-2">Attendance System</span>
                             </a>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="card card-default">
-                    <div class="card-header"><h5>Login</h5></div>
-                    <div class="card-body">
-                        <form>
-                            <div class="form-group row">
-                                <label for="email" class="col-sm-4 col-form-label text-md-right">E-Mail Address</label>
-                                <div class="col-md-8">
-                                    <input id="email" type="email" class="form-control" v-model="email" required autofocus autocomplete="off" placeholder="Enter your email">
-                                </div>
-                            </div>
-
-
-                            <div class="form-group row mt-1">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
-                                <div class="col-md-8">
-                                    <input id="password" type="password" class="form-control" v-model="password" required autocomplete="off" placeholder="Enter your password">
-                                </div>
-                            </div>
-
-                            <div class="form-group row mt-1 mb-0">
-                                <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-success" @click="handleSubmit">
-                                        Login
-                                    </button>
-                                </div>
-                            </div>
-
-                            <button class="btn btn-success" @click="system()">
-                                Attendance Stysem
-                            </button>
-                        </form>
                     </div>
                 </div>
                 

@@ -7,6 +7,8 @@ import App from './App.vue';
 import axios from 'axios';
 import router from './router';
 import Antd from "ant-design-vue";
+import Datepicker from 'flowbite-datepicker/Datepicker';
+import DateRangePicker from 'flowbite-datepicker/DateRangePicker';
 import 'ant-design-vue/dist/antd.css';
 import {
  EyeFilled

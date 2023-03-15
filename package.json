@@ -27,6 +27,7 @@
     "dependencies": {
         "@ant-design/icons-vue": "^6.1.0",
         "ant-design-vue": "^3.2.15",
+        "flowbite-datepicker": "^1.2.2",
         "sweetalert2": "^11.7.3",
         "vue": "^3.2.36",
         "vue-moment": "^4.1.0",

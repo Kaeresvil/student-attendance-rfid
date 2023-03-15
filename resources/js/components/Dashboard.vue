@@ -1,14 +1,17 @@
 <template>
-         <nav class="navbar navbar-expand-sm navbar-dark mb-4 " style="background-color: #FFA800;">
-            <a v-if="isLoggedIn && !$route.path.includes('attendance')" class="navbar-brand mx-5 text-dark"   href="#">LOGO</a>
-            <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
-                aria-expanded="false" aria-label="Toggle navigation"></button>
-          <div class="navbar-nav"  v-if="isLoggedIn && !$route.path.includes('attendance')">
+         <nav class="navbar navbar-expand-sm navbar-dark mb-4 p-0 " style="background-color: #FFA800;">
+            <a v-if="isLoggedIn && !$route.path.includes('attendance')" class="navbar-brand mx-5 text-dark "   href="#">
+                <img class="lg:w-20 lg:h-20  overflow-hidden" src="/img/RFIDLOGO.png"/>
+            </a>
+            <!-- <button class="navbar-toggler d-lg-none border" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+                aria-expanded="false" aria-label="Toggle navigation"></button> -->
+
+            <div class="navbar-nav "  v-if="isLoggedIn && !$route.path.includes('attendance')">
                 <router-link to="/home" class="nav-item nav-link text-dark">Home</router-link>
                 <router-link to="/students" class="nav-item nav-link text-dark">Students</router-link>
-                 <router-link to="/events" class="nav-item nav-link text-dark">Events</router-link>
-                 <router-link to="/reports" class="nav-item nav-link text-dark">Reports</router-link>
-                 <div class="dropdown">
+                <router-link to="/events" class="nav-item nav-link text-dark">Events</router-link>
+                <router-link to="/reports" class="nav-item nav-link text-dark">Reports</router-link>
+                <div class="dropdown">
                 <a  class="nav-item nav-link text-dark dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     Settings
                 </a>

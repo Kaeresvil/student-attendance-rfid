@@ -50,6 +50,17 @@ export const routes = [
                 component: ()=> import("../components/events/events.vue")
             },
             {
+                name: 'create-events',
+                path: '/create/events',
+                component: ()=> import("../components/events/Form.vue")
+            },
+            {
+                name: 'edit-events',
+                path: '/edit/events/:id',
+                component: ()=> import("../components/events/Form.vue"),
+                props:true
+            },
+            {
                 name: 'reports',
                 path: '/reports',
                 component: ()=> import("../components/reports/reports.vue")

@@ -9,6 +9,7 @@ use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\GradeLevelController;
 use App\Http\Controllers\API\SectionController;
 use App\Http\Controllers\API\StudentController;
+use App\Http\Controllers\API\EventController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -45,6 +46,12 @@ Route::group(['prefix' => 'page','middleware' => 'auth:sanctum'], function() {
     Route::delete('studentdelete/{id}', [StudentController::class,'delete']);
     Route::post('student/update/{id}', [StudentController::class,'update']);
 
+    /// routes for event
+    Route::post('event/add', [EventController::class, 'store']);
+    Route::get('event', [EventController::class,'index']);
+    Route::get('eventedit/{id}', [EventController::class,'show']);
+    Route::delete('eventdelete/{id}', [EventController::class,'delete']);
+    Route::post('event/update/{id}', [EventController::class,'update']);
 
     /// routes for roles
     Route::get('roles', [RoleController::class,'Rindex']);

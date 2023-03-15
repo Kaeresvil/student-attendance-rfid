@@ -4,7 +4,7 @@ ar<template>
             <div class="row">
                 <div class="col-sm-5 justify-content-center pt-4 bucket" >
 
-                    <img src="/img/logo.png" alt="">
+                    <img class="w-24 " src="/img/RFIDLOGO.png"/>
 
                     <div class="row  justify-content-center" style="align-items: center; font-weight: 900; font-size: 20px;">
                      {{ continues_date }}
@@ -25,7 +25,7 @@ ar<template>
                     </div>
                     <div class="row selector">
                      
-                            <h5 style="font-size: 15px;">Choose Log Type Below</h5>
+                            <h5 class="text-white" style="font-size: 15px;">Choose Log Type Below</h5>
 
                             <div class="col-sm justify-content-center">
                                 <div class="form-check">
