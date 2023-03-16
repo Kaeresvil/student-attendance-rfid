@@ -19,9 +19,15 @@ class StudentController extends Controller
         if (isset($params['limit'])) {
             $limit = $params['limit'];
         }
-        if (isset($params['search'])) {
+        if (isset($params['search']) && $params['section'] != 1) {
+            $search = $params['search'];
+            $query = Student::where('grade_section_id', $params['section'])->where('name', 'LIKE', '%'.$search.'%')->orwhere('lrn', 'LIKE', '%'.$search.'%')->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
+        } else if (isset($params['search']) && $params['section'] == 1) {
             $search = $params['search'];
             $query = Student::where('name', 'LIKE', '%'.$search.'%')->orwhere('lrn', 'LIKE', '%'.$search.'%')->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
+        }
+        else if($params['section'] != 1){
+            $query = Student::where('grade_section_id', $params['section'])->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
         }else{
             $query = Student::with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
         }
@@ -40,6 +46,24 @@ class StudentController extends Controller
         return array_reverse($grade);
     }
 
+    public function change(Request $request)
+    {
+   
+        $students = $request->_value;
+        $stud_id = [];
+        foreach($students as $student){
+            array_push($stud_id, $student['id']);
+            
+        }
+
+        Student::whereIn("id", $stud_id)
+        ->update([
+            'grade_section_id' => $request->section_id,
+        ]);
+
+        return response()->json(['success'=> 'Student Updated Successfully']);
+        
+    }
     public function store(Request $request)
     {
         $request->validate([

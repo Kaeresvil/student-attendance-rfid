@@ -40,6 +40,7 @@ Route::group(['prefix' => 'page','middleware' => 'auth:sanctum'], function() {
 
     /// routes for student
     Route::post('student/add', [StudentController::class, 'store']);
+    Route::post('students/change', [StudentController::class, 'change']);
     Route::get('student', [StudentController::class,'index']);
     Route::get('studentedit/{id}', [StudentController::class,'show']);
     Route::delete('studentdelete/{id}', [StudentController::class,'delete']);

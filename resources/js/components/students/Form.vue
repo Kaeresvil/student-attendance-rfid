@@ -10,7 +10,7 @@
                     <div class="d-flex justify-content-between ">
                                 <h5 class="card-title">Create New Student</h5>
                                 <div>
-                                    <button class="block mr-2 uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" type="button" @click="this.$router.push('/students')">Back</button>
+                                    <button class="block mr-2 uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" type="button" @click="this.$router.back()">Back</button>
                                 </div>
                             </div>
 
