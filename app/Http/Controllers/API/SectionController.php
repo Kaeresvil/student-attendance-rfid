@@ -47,7 +47,17 @@ class SectionController extends Controller
 
         $input = $request->all();
 
-        Section::create($input);
+        $sec = Section::orderBy('id', 'DESC')->first();
+        if($sec == ''){
+            $input['id'] = 2;
+            Section::create($input);
+        }else{
+            $input['id'] = $sec->id+1;
+            Section::create($input);
+        }
+
+
+        // Section::create($input);
 
         return response()->json(['success'=> 'Section Created Successfully']);
 

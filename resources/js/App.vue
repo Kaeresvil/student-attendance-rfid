@@ -36,6 +36,17 @@
   border-color: #367fa9 !important;
   color: white !important;
 }
+.buttondelete {
+  background-color: #a71616 !important;
+  border-color: #a70909 !important;
+  color: white !important;
+}
+
+.ant-btn[disabled] {
+    background-color: #a8a8a8 !important;
+}
+
+
 
 
 </style>

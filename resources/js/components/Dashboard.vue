@@ -27,7 +27,7 @@
             </div>
 
             <div v-else class="mx-auto">
-                <h1>RFID Attendance Management System</h1>
+                <h1 class="systemname">RFID Attendance Management System</h1>
             </div>
 
 
@@ -89,6 +89,11 @@ setup(props){
 </script>
 
 <style scoped>
+.systemname{
+    font-size: 33px;
+    font-weight: bold;
+    margin-top: 2px;
+}
 .logout{
     color: black;
     font-weight: 600;

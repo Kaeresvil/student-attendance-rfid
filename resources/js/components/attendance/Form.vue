@@ -25,36 +25,27 @@ ar<template>
                     </div>
                     <div class="row selector">
                      
+                            <h5 style="font-size: 17px; color: white">Choose Log Type Below</h5>
                             <h5 class="text-white" style="font-size: 15px;">Choose Log Type Below</h5>
 
-                            <div class="col-sm justify-content-center">
+                        <a-radio-group v-model:value="value" button-style="solid">
+                            <div class="selectorcolumn">
                                 <div class="form-check">
-                                <input @click="onChangetimein('timeinAM')" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
-                                <label class="form-check-label" for="flexRadioDefault1">
-                                   TIME IN (AM)
-                                </label>
+                                    <a-radio-button  :value="1">Time in(AM)</a-radio-button>
                                 </div>
                                 <div class="form-check">
-                                <input  @click="onChangetimein('timeinPM')" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    TIME IN (PM)
-                                </label>
+                                    <a-radio-button  :value="2">Time in(PM)</a-radio-button>
                                 </div>
                             </div>
-                            <div class="col-sm">
+                            <div class="selectorcolumn">
                                 <div class="form-check">
-                                <input   @click="onChangetimein('timeoutAM')" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
-                                <label class="form-check-label" for="flexRadioDefault1">
-                                    TIME OUT (AM)
-                                </label>
+                                    <a-radio-button  :value="3">Time out(AM)</a-radio-button>
                                 </div>
                                 <div class="form-check">
-                                <input @click="onChangetimein('timeoutPM')" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault5">
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    TIME OUT (PM)
-                                </label>
+                                    <a-radio-button  :value="4">Time out(PM)</a-radio-button>
                                 </div>
                             </div>
+                        </a-radio-group>
                     </div>
                 </div>
                 <div v-if="visible_scanner" class="col-sm scanner">
@@ -175,6 +166,12 @@ console.log( e);
 
 
 <style scoped>
+.selectorcolumn {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
 img {
   display: block;
   margin-left: auto;
@@ -248,7 +245,7 @@ img {
     border-color: #fa0000;
 }
 .form-check-input {
-    align-self: center;
+    align-self: center !important;
 }
 
 
@@ -264,10 +261,11 @@ h5{
 }
 
 .form-check .form-check-input {
-    margin-right: 4px;
+    margin-right: 5px;
     font-size: 17px;
     margin-top: 2px;
 }
+
 
 
 </style>
