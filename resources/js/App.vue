@@ -46,6 +46,16 @@
     background-color: #a8a8a8 !important;
 }
 
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    color: #fff;
+    background: #a71616 !important;
+    border-color: #a71616 !important;
+}
+
+.ant-radio-button-wrapper:hover {
+    color: #FFA800 !important;
+}
+
 
 
 

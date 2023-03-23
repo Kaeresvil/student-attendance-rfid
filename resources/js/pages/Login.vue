@@ -75,17 +75,37 @@
 
 <script>
 import axios from "../axios"
+import Swal from "sweetalert2";
     export default {
         data() {
             return {
                 email: "",
                 password: "",
+                isOn: "",
                 error: null
             }
         },
         methods: {
             system (){
-                this.$router.push('/attendance')
+                  /// get system switch
+            axios.get('/api/getswitch')
+                .then(response => {
+                    this.isOn =  response.data.isSet === 1? true:false
+                })
+                .catch(function(error) {
+                    console.log(error);
+                }); 
+                if(this.isOn){
+                    this.$router.push('/attendance')
+                }else{
+                    Swal.fire({
+                icon: "error",
+                title: 'Attendance System is not Available this time!',
+                text: 'Please try again later',
+                showConfirmButton: true,
+               });     
+                }
+            
             },
          
             handleSubmit(e) {

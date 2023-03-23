@@ -11,7 +11,17 @@
 
                 <a-divider />
 
-                <a-row style="margin-bottom: 15px">
+                <div>
+                    <div style="margin-bottom: 16px">
+                    <a-button   class="btn btn-sm buttonshow mr-1" @click="setEvent()">
+                        Set Event
+                    </a-button>
+                    <a-switch @click="setswitch()" :loading="switchloading" checked-children="ON A-System" un-checked-children="OFF A-System" v-model:checked="switch_form.isSet" />
+                    </div>
+                       
+                </div>
+
+                <a-row style="margin-bottom: 15px; width: 98%;">
                     <a-col class="search">
                         <a-input-search
                             placeholder="search"
@@ -53,6 +63,11 @@
                     <template v-slot:section="{ record }">
                         <span>{{ record.section.name }}</span>
                     </template>
+                    <template v-slot:isSet="{ record }">
+                        <a-tag :color="record.isSet === 1 ?  '#0073b7':'#dd4b39'">{{
+                            record.isSet === 1 ? "Set" : "No"
+                        }}</a-tag>
+                    </template>
 
                 </a-table>
 
@@ -92,17 +107,25 @@
 import { defineComponent, ref, onMounted, reactive,toRefs } from 'vue';
 import axios from "../../axios"
 import { useRouter } from 'vue-router'
+import Swal from "sweetalert2";
 
 export default defineComponent({
 components:{},
 setup(){
     const users = ref([])
+    const option_events = ref({})
     const loading = ref(true)
+    const switchloading = ref(false)
+    const isON = ref(true);
     const router = useRouter()
     const form = reactive({
       page: 1,
       limit: 15,
       search: "",
+    });
+    const switch_form = reactive({
+     id: 1,
+     isSet: ""
     });
 
     const columns = [
@@ -113,6 +136,12 @@ setup(){
         {
             title: 'Event Date',
             dataIndex: 'event_date',
+        },
+        {
+            title: 'Set Event',
+            dataIndex: 'event_date',
+            slots: { customRender: 'isSet' },
+            align: 'center'
         },
         {
             title: 'Event Description',
@@ -127,6 +156,30 @@ setup(){
         ];
 
         const index = (payload = {page: 1}) => {
+        //get grade and section
+        axios.get('/api/page/all_events')
+            .then(response => {
+                console.log('res',response.data)
+                response.data.forEach((datum) =>{
+                     Object.assign(option_events.value, {[datum.id]: datum.event_name});
+                })
+
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+            /// get system switch
+            switchloading.value = true
+        axios.get('/api/page/switchedit')
+            .then(response => {
+                switch_form.isSet = response.data.isSet === 1 ? true:false
+                switchloading.value = false
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+
+
             loading.value = true;
                 axios.get('/api/page/event', {params: {...payload}})
                 .then(response => {
@@ -173,6 +226,87 @@ setup(){
             query: {archive: 'false'}
             })
     }
+
+
+
+    const setswitch = () => {
+        switchloading.value = true
+        console.log('isON', switch_form.isSet)
+       
+        axios.post(`/api/page/switch/update/${switch_form.id}`,switch_form)
+                .then(response => { 
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                        })
+
+                        Toast.fire({
+                        icon: 'success',
+                        title: 'Attendance System is already set'
+                        }) 
+                        switchloading.value = false       
+                    })
+                .catch(function (error) {
+                console.log(error)
+                });
+
+
+        
+    }
+    const setEvent = () => {
+        const id = ref({})
+
+   Swal.fire({
+   title: 'Set Attendance Event',
+   input: 'select',
+   inputOptions: option_events.value,
+   inputPlaceholder: 'Select event...',
+   showCancelButton: true,
+   inputValidator: (value) => {
+       return new Promise((resolve) => {
+        id.event_id = value
+        console.log(value)
+           axios.post('/api/page/setevent',id)
+               .then(response => {
+
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                    })
+
+                    Toast.fire({
+                    icon: 'success',
+                    title: 'Event Set Successfully'
+                    })
+
+                   resolve()
+                onChange()
+                       
+               })
+               .catch(function (error) {
+               console.log(error)
+               });
+       })
+     }
+   })
+
+   
+};
+
     onMounted(index)
 
     return {
@@ -180,10 +314,15 @@ setup(){
         onShowLimit,
         debounce: createDebounce(),
         editRecord,
+        setEvent,
+        setswitch,
 
         form,
+        switch_form,
+        isON,
         users,
         loading,
+        switchloading,
         columns
     }
 }
@@ -195,6 +334,9 @@ setup(){
 <style scoped>
 .ant-table-small .ant-table-thead > tr > th {
     background-color: #bb1111;
+}
+.ant-switch-checked {
+   background-color: #367fa9;
 }
 .search {
   display: flex;

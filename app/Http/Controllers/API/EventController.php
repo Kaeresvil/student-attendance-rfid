@@ -32,6 +32,36 @@ class EventController extends Controller
         ], 200);
     }
 
+    public function getEvent(Request $request){
+       
+        $event = Event::where("isSet", 1)->get();
+        return response()->json([
+            'message' => 'Success',
+            'data' => $event
+        ], 200);
+
+
+    }
+    public function setEvent(Request $request){
+       
+        Event::where("isSet", 1)
+        ->update([
+            'isSet' => 0,
+        ]);
+        Event::where("id", $request->event_id)
+        ->update([
+            'isSet' => 1,
+        ]);
+
+        return response()->json(['success'=> 'Event Set Successfully']);
+
+    }
+
+    public function getall(){
+        $grade = Event::get()->toArray();
+        return array_reverse($grade);
+    }
+
     public function store (Request $request)
     {
         $request->validate([

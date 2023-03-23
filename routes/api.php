@@ -10,6 +10,8 @@ use App\Http\Controllers\API\GradeLevelController;
 use App\Http\Controllers\API\SectionController;
 use App\Http\Controllers\API\StudentController;
 use App\Http\Controllers\API\EventController;
+use App\Http\Controllers\API\SwitchController;
+use App\Http\Controllers\API\AttendanceController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -29,8 +31,17 @@ use App\Http\Controllers\API\EventController;
 Route::post('login', [UserController::class, 'login']);
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 Route::post('attendance', [UserController::class, 'attendance']);
+Route::get('getevent', [EventController::class, 'getEvent']);
+Route::get('getswitch', [SwitchController::class, 'get']);
+Route::get('getStudent/{id}', [StudentController::class, 'getStudent']);
+Route::post('attendance', [AttendanceController::class, 'store']);
+
 
 Route::group(['prefix' => 'page','middleware' => 'auth:sanctum'], function() {
+
+    /// routes for system switch;
+    Route::get('switchedit', [SwitchController::class,'get']);
+    Route::post('switch/update/{id}', [SwitchController::class,'set']);
 
     /// routes for users
     Route::post('register', [UserController::class, 'register']);
@@ -49,6 +60,8 @@ Route::group(['prefix' => 'page','middleware' => 'auth:sanctum'], function() {
 
     /// routes for event
     Route::post('event/add', [EventController::class, 'store']);
+    Route::post('setevent', [EventController::class, 'setEvent']);
+    Route::get('all_events', [EventController::class,'getall']);
     Route::get('event', [EventController::class,'index']);
     Route::get('eventedit/{id}', [EventController::class,'show']);
     Route::delete('eventdelete/{id}', [EventController::class,'delete']);

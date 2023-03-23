@@ -1,5 +1,5 @@
-ar<template>
-    <div style=" width: 100vw; height: auto;">
+<template>
+    <div @click="preventBlur()" style=" width: 100vw; height: 100vh; margin-top: -85px;">
      <div class="container" style="align-items:center; margin-top: 3%;">
             <div class="row">
                 <div class="col-sm-5 justify-content-center pt-4 bucket" >
@@ -16,68 +16,67 @@ ar<template>
                      {{ continues_time}}
                     </div>
                     <div class="row justify-content-center">
-                        <a-select style="width: 90%;" show-search v-model:value="form.grade_level_id" id="role_id">
-                                        <a-select-option v-for="grade in option_gradelevel" :key="grade.id" size="large">{{
-                                            grade.grade_level
-                                        }}
-                                        </a-select-option>
-                                        </a-select>
+                        <a-input style="width:90%; text-align: center; font-size: 16px; font-weight: bold;" v-model:value=" form.event_name" :readonly="true"/>
                     </div>
                     <div class="row selector">
                      
                             <h5 style="font-size: 17px; color: white">Choose Log Type Below</h5>
-                            <h5 class="text-white" style="font-size: 15px;">Choose Log Type Below</h5>
 
-                        <a-radio-group v-model:value="value" button-style="solid">
+                        <a-radio-group v-model:value="form.attendance_type" button-style="solid">
                             <div class="selectorcolumn">
                                 <div class="form-check">
-                                    <a-radio-button  :value="1">Time in(AM)</a-radio-button>
+                                    <a-radio-button @click="onChangetimein()"  :value="1">Time in(AM)</a-radio-button>
                                 </div>
                                 <div class="form-check">
-                                    <a-radio-button  :value="2">Time in(PM)</a-radio-button>
+                                    <a-radio-button @click="onChangetimein()"  :value="2">Time in(PM)</a-radio-button>
                                 </div>
                             </div>
                             <div class="selectorcolumn">
                                 <div class="form-check">
-                                    <a-radio-button  :value="3">Time out(AM)</a-radio-button>
+                                    <a-radio-button @click="onChangetimein()"  :value="3">Time out(AM)</a-radio-button>
                                 </div>
                                 <div class="form-check">
-                                    <a-radio-button  :value="4">Time out(PM)</a-radio-button>
+                                    <a-radio-button @click="onChangetimein()"  :value="4">Time out(PM)</a-radio-button>
                                 </div>
                             </div>
                         </a-radio-group>
                     </div>
                 </div>
-                <div v-if="visible_scanner" class="col-sm scanner">
+                <div v-if="visible_scanner && !visible_notregistered" class="col-sm scanner">
                    
                    <img class="img_scanner" src="/img/scanner.png" alt="">
                     <p class="tapper">Tap your RFID to the Reader</p>
                     <p style="margin-top: -20px;">In case lost of RFID type your LRN below.</p>
-                    <input class="code" @keyup="parseCode(form.rfid_code)" placeholder="Learner Refence No." ref="focusMe"  type='text' v-model="form.rfid_code" autofocus/>
+                    <input class="code" @input="parseCode()" placeholder="Learner Refence No." ref="focusMe"  type='text' v-model="form.rfid_code" autofocus/>
                   
                 </div>
-                <div v-else class="col-sm scanner_info" >
+                <div v-if="visible_notregistered && visible_scanner " class="col-sm scanner">
+                    <p v-if="!existing" class="notfound">Learner Refence Number not found in the database!</p>
+                    <p  v-if="existing" class="notfound">{{ existing_message }}</p>
+                  
+                </div>
+                <div v-if="!visible_notregistered && !visible_scanner " class="col-sm scanner_info" >
                     <div class="row justify-content-center">
                            <h2 style="font-size: 18px; font-weight: bold; margin-left: 30px; margin-top: 20px;">Learner Refence No.</h2> 
                         <div class="LRN" style="border: 1px solid black; width: 90%; font-size: 17px; font-weight: bold;">{{ form.rfid_code }}</div>
                         <!-- <input @keyup="parseCode(form.rfid_code)" autofocus  type='text' v-model="form.rfid_code" style=" background: transparent; width: 90%; font-size: 17px; font-weight: bold;"/> -->
                                         </div>
                     <div class="row">
-                            <h2  style="font-size: 18px; font-weight: bold; margin-left: 10px;">Arrive Time: {{ timeIn }} </h2>
+                            <h2  style="font-size: 22px; font-weight: bold; margin-left: 10px;"><i class="stud_in">Arrive Time:</i> {{ form.time }} </h2>
                     </div>
                     <div class="row">
-                        <h2  style="font-size: 18px; font-weight: bold; margin-left: 10px;">Remarks: You arrived 29 minutes and 30 seconds early. </h2>
+                        <h2  style="font-size: 22px; font-weight: bold; margin-left: 10px;"><i class="stud_in">Remarks:</i> You arrived 29 minutes and 30 seconds early. </h2>
                     </div>
                     <div class="row justify-content-center">
                       <div style="background-color:#032b5e; color: white; text-align: center; width: 50%; margin-bottom: -13px;font-size: 16px;">STUDENT DETAILS</div>
                       <div style="border: 1px solid #032b5e; width: 90%; padding-top: 20px; margin-bottom: 5px;">
-                        <h2>Name: Kaeresvil O. Arellano</h2>
-                        <h2>Grade: 12</h2>
-                        <h2>Section: TVL-A</h2>
+                        <h2 class="stud_details"><i class="stud_in">Name: </i> {{ form.name }}</h2>
+                        <h2 class="stud_details"><i class="stud_in">Grade: </i> {{ form.grade }}</h2>
+                        <h2 class="stud_details"><i class="stud_in">Section: </i> {{ form.section }}</h2>
                       </div>
                     </div>
                     <div class="row justify-content-center">
-                      <div style="background-color:#032b5e; color: white; text-align: center; width: 90%;font-size: 22px;">YOU HAVE SUCCESSFULLY LOGGED IN!</div>
+                      <div @click="sample()" style="background-color:#032b5e; color: white; text-align: center; width: 90%;font-size: 22px;">YOU HAVE SUCCESSFULLY TIME {{form.attendance_type === 1 || form.attendance_type === 2 ?'IN':'OUT'}}!</div>
                     </div>
                 </div>
 
@@ -89,23 +88,36 @@ ar<template>
 <script >
 import { defineComponent, ref, onMounted, reactive } from 'vue';
 import moment from "moment"
+import { useRoute, useRouter} from 'vue-router'
+import router from '../../router';
 
 export default defineComponent({
 components:{},
 setup(){
     const visible_scanner = ref(true)
+    const visible_notregistered = ref(false)
+    const existing = ref(false)
     const continues_time = ref()
+    const existing_message = ref()
     const continues_date = ref()
     const continues_day = ref()
+    const router = useRouter()
     const timeIn = ref()
     const form = reactive({
         id: "",
         rfid_code: "",
-        first_name:"",
-        middle_name:"",
-        last_name:"",
-        grade:"",
-        section:"",
+        stud_id: "",
+        name: "",
+        grade: "",
+        section: "",
+        section_id: "",
+        event_name: "",
+        event_id: "",
+        current_grade_id:"",
+        current_section_id:"",
+        attendance_type: "",
+        attendance_date:"",
+        time:"",
     })
  
     const autofocusFields = (e)=>{
@@ -114,48 +126,132 @@ setup(){
 
         function hideKeyboard(el) {
         setTimeout(function() {
-            el.blur(); //close the keyboard
             el.focus(); //focus on the input
         }, 100);
         }
     }
-    const onChangetimein = (e)=>{
+    const sample = (e)=>{
+console.log(form)
+    }
+    const onChangetimein = ()=>{
+        autofocusFields()
+    }
+    const preventBlur = ()=>{
         autofocusFields()
     }
     const parseCode = (e)=>{
-       
-        timeIn.value =   continues_time.value;
-        setTimeout(() => {
-            visible_scanner.value = false
-        timeIn.value = "";
-        }, 1000)
-        setTimeout(() => {
-            visible_scanner.value = true
-            form.rfid_code = "",
-            autofocusFields()
-        }, 5000)
-console.log( e);
+        
+        form.attendance_date =     moment().format("YYYY-MM-DD h:mm:ss a");
+        form.time =  moment().format("LTS");
+        if(form.rfid_code.length == 10){
+            axios.get(`/api/getStudent/${form.rfid_code}`)
+            .then(response => {
+                response.data.forEach((datum) =>{
+                    form.stud_id =datum.id
+                    form.name =datum.name
+                    form.section =datum.section.name
+                    form.section_id =datum.section.id
+                    form.grade =datum.section.grade_level.grade_level
+                })
+                if(form.name === '' && form.section === '' && form.grade === ''){
+                    visible_notregistered.value = true
+                    setTimeout(() => {
+                        visible_notregistered.value = false
+                        form.rfid_code = ""
+                        form.stud_id = ""
+                        form.name = ""
+                        form.section = ""
+                        form.grade = ""
+                        }, 3000)
+                }else{
+                 
+                    axios.post('/api/attendance',form)
+                    .then(response => { 
+                       if(response.data.status == 'existing'){
+                            existing_message.value = response.data.message,
+                            existing.value = true
+                            visible_notregistered.value = true
+                            setTimeout(() => {
+                            visible_notregistered.value = false
+                            existing.value = false
+                            form.rfid_code = ""
+                            form.stud_id = ""
+                            form.name = ""
+                            form.section = ""
+                            form.grade = ""
+                            }, 3000)
+                            console.log('ssss')
+                        }else if(response.data.status == 'success'){
+                            visible_scanner.value = false   
+                            setTimeout(() => { 
+                            visible_scanner.value = true
+                            form.rfid_code = "",
+                            form.stud_id = ""
+                            form.name = ""
+                            form.section = ""
+                            form.grade = ""
+                            }, 4000)
+                        }
+                    })
+
+                   
+
+                }     
+             
+
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        }
 
     }
 
     onMounted(() =>{ 
+        form.attendance_type = 1
         setInterval(() => {
             continues_time.value =moment().format('LTS');
             continues_date.value =moment().format('LL');
-            continues_day.value =moment().format('dddd'); 
-        }, 1000)
-    //    document.getElementsByClassName('code')
-    autofocusFields()
+            continues_day.value =moment().format('dddd');
+            autofocusFields() 
+        }, 100)
+      //get grade and section
+      axios.get('/api/getevent')
+            .then(response => {       
+                response.data.data.forEach((data) => {
+                    form.event_name = data.event_name
+                    form.event_id = data.id
+                })
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+            axios.get('/api/getswitch')
+                .then(response => {
+                   response.data.isSet === 0 ? router.push('/'):console.log(response)
+                })
+                .catch(function(error) {
+                    console.log(error);
+                }); 
+                
+
+    
+    
     })
     return {
         onChangetimein,
         parseCode,
+        sample,
+        preventBlur,
         continues_time,
         continues_date,
         continues_day,
         timeIn,
         form,
-        visible_scanner
+        visible_scanner,
+        visible_notregistered,
+        existing_message,
+        existing
     }
 }
 })
@@ -166,6 +262,14 @@ console.log( e);
 
 
 <style scoped>
+.stud_in{
+    font-size: 20px;
+    font-weight: 500;
+}
+.stud_details{
+    font-size: 25px;
+    font-weight: bold;
+}
 .selectorcolumn {
   float: left;
   width: 50%;
@@ -214,6 +318,12 @@ img {
     font-weight: 900;
     margin-top: -10px;
 }
+.notfound{
+    font-size: 25px;
+    font-weight: 900;
+    margin-top: 34%;
+    
+    }
 .selector{
     position: relative;
     border: 1px solid rgb(0, 0, 0);

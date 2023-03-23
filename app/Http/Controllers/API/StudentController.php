@@ -41,6 +41,10 @@ class StudentController extends Controller
         ], 200);
     }
 
+    public function getStudent( $lrn){
+        $studen = Student::where('lrn',$lrn)->with('section')->get();
+        return response()->json($studen);
+    }
     public function getall(){
         $grade = Student::all()->toArray();
         return array_reverse($grade);
