@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Section;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SectionController extends Controller
 {
@@ -31,8 +32,52 @@ class SectionController extends Controller
             'data' => $query
         ], 200);
     }
+    public function index_reports(Request $request)
+    {
+        $params = $request->all();
+        $user = Auth::user();
+        $allSectionsId = $user->allSectionsId();
+
+        $orderByColumn = 'updated_at';
+        $direction = 'DESC';
+        $limit = 15;
+        if (isset($params['limit'])) {
+            $limit = $params['limit'];
+        }
+        if (isset($params['search'])) {
+            $search = $params['search'];
+            $searchable = ['name', 'description'];
+            if (count($allSectionsId) > 0) {
+            $query = Section::whereIn('id',$allSectionsId)->where('name', 'LIKE', '%'.$search.'%' )
+            ->orWhereHas('grade_level', function($query) use($search){
+                $query->where('grade_level', 'LIKE', '%'.$search.'%');
+            })
+            ->whereIn('id',$allSectionsId)
+           ->with('grade_level')
+            ->orderBy($orderByColumn, $direction)->paginate($limit);
+            }
+        }else{
+            if (count($allSectionsId) > 0) {
+            $query = Section::whereIn('id',$allSectionsId)->with('grade_level')->orderBy($orderByColumn, $direction)->paginate($limit);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Successfully Created',
+            'data' => $query
+        ], 200);
+    }
 
     public function getall(){
+        $user = Auth::user();
+        $allSectionsId = $user->allSectionsId();
+        if (count($allSectionsId) > 0) { 
+        $grade = Section::whereIn('id',$allSectionsId)->with('grade_level')->get()->toArray();
+        }
+        return array_reverse($grade);
+    }
+
+    public function getallNoRestriction(){
         $grade = Section::with('grade_level')->get()->toArray();
         return array_reverse($grade);
     }

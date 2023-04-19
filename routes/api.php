@@ -46,9 +46,11 @@ Route::group(['prefix' => 'page','middleware' => 'auth:sanctum'], function() {
     /// routes for users
     Route::post('register', [UserController::class, 'register']);
     Route::get('users', [UserController::class,'Uindex']);
+    Route::get('auth_user', [UserController::class,'AuthUser']);
     Route::get('usersedit/{id}', [UserController::class,'Uedit']);
     Route::delete('usersdelete/{id}', [UserController::class,'Udelete']);
     Route::post('users/update/{id}', [UserController::class,'Uupdate']);
+    Route::post('users/profileupdate/{id}', [UserController::class,'profileUpdate']);
 
     /// routes for student
     Route::post('student/add', [StudentController::class, 'store']);
@@ -85,10 +87,15 @@ Route::group(['prefix' => 'page','middleware' => 'auth:sanctum'], function() {
 
     /// routes for section
     Route::get('section', [SectionController::class,'index']);
+    Route::get('section_reports', [SectionController::class,'index_reports']);
     Route::get('all_section', [SectionController::class,'getall']);
+    Route::get('all_section_noRestrict', [SectionController::class,'getallNoRestriction']);
     Route::post('section/add', [SectionController::class,'store']);
     Route::get('section_show/{id}', [SectionController::class,'show']);
     Route::post('section_update/{id}', [SectionController::class,'update']);
     Route::delete('section_delete/{id}', [SectionController::class,'delete']);
+
+    //// routes for reports
+    Route::get('/get/student/attendance', [AttendanceController::class, 'getstudentattendance']);
 
 });

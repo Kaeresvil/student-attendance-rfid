@@ -19,4 +19,15 @@ class Attendance extends Model
         'pm_time_in',
         'pm_time_out',
       ];
+
+      public function student()
+      {
+          return $this->hasOne(Student::class,'lrn','stud_lrn');
+        
+      }
+      public function event()
+      {
+          return $this->hasOne(Event::class,'id','event_id');
+        
+      }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
@@ -16,23 +17,30 @@ class StudentController extends Controller
         $orderByColumn = 'updated_at';
         $direction = 'DESC';
         $limit = 15;
+
+        $user = Auth::user();
+        $allSectionsId = $user->allSectionsId();
+        if (count($allSectionsId) > 0) { 
+
         if (isset($params['limit'])) {
             $limit = $params['limit'];
         }
         if (isset($params['search']) && $params['section'] != 1) {
             $search = $params['search'];
-            $query = Student::where('grade_section_id', $params['section'])->where('name', 'LIKE', '%'.$search.'%')->orwhere('lrn', 'LIKE', '%'.$search.'%')->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
+            $query = Student::whereIn('grade_section_id',$allSectionsId)->where('grade_section_id', $params['section'])->where('name', 'LIKE', '%'.$search.'%')->orwhere('lrn', 'LIKE', '%'.$search.'%')->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
         } else if (isset($params['search']) && $params['section'] == 1) {
             $search = $params['search'];
-            $query = Student::where('name', 'LIKE', '%'.$search.'%')->orwhere('lrn', 'LIKE', '%'.$search.'%')->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
+            $query = Student::whereIn('grade_section_id',$allSectionsId)->where('name', 'LIKE', '%'.$search.'%')->orwhere('lrn', 'LIKE', '%'.$search.'%')->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
         }
         else if($params['section'] != 1){
-            $query = Student::where('grade_section_id', $params['section'])->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
+            $query = Student::whereIn('grade_section_id',$allSectionsId)->where('grade_section_id', $params['section'])->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
         }else{
-            $query = Student::with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
+            $query = Student::whereIn('grade_section_id',$allSectionsId)->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
         }
 
 
+
+        }
 
 
         return response()->json([

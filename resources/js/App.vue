@@ -5,6 +5,9 @@
 </template>
 
 <style>
+body {
+    background-color: #D3D3D3 !important;
+}
 .div_container{
   max-width: 98%;
     position: absolute;

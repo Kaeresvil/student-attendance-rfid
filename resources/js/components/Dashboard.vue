@@ -6,21 +6,22 @@
             <!-- <button class="navbar-toggler d-lg-none border" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
                 aria-expanded="false" aria-label="Toggle navigation"></button> -->
 
-            <div class="navbar-nav "  v-if="isLoggedIn && !$route.path.includes('attendance')">
-                <router-link to="/home" class="nav-item nav-link text-dark">Home</router-link>
+            <div class="navbar-nav "  v-if="isLoggedIn && !$route.path.includes('attendance') && loading">
+                <!-- <router-link to="/home" class="nav-item nav-link text-dark">Home</router-link> -->
                 <router-link to="/students" class="nav-item nav-link text-dark">Students</router-link>
-                <router-link to="/events" class="nav-item nav-link text-dark">Events</router-link>
-                <router-link to="/reports" class="nav-item nav-link text-dark">Reports</router-link>
+                <router-link v-if="isHeadTeacher || isAdmin" to="/events" class="nav-item nav-link text-dark">Events</router-link>
+                <router-link to="/reports" class="nav-item nav-link text-dark">Reports/Attendance</router-link>
                 <div class="dropdown">
                 <a  class="nav-item nav-link text-dark dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     Settings
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
-                    <li> <router-link to="/users" class="dropdown-item">Users</router-link></li>
-                    <li> <router-link to="/roles" class="dropdown-item">Roles</router-link></li>
-                    <li> <router-link to="/grades" class="dropdown-item">Grade Level</router-link></li>
-                    <li> <router-link to="/sections" class="dropdown-item">Sections</router-link></li>
+                    <li> <a @click="editRecord" to='' class="dropdown-item">{{authUser.name}} (Profile)</a></li>
+                    <li> <router-link v-if="isAdmin"  to="/users" class="dropdown-item">Users</router-link></li>
+                    <li> <router-link v-if="isAdmin" to="/roles" class="dropdown-item">Roles</router-link></li>
+                    <li> <router-link v-if="isAdmin" to="/grades" class="dropdown-item">Grade Level</router-link></li>
+                    <li> <router-link v-if="isAdmin" to="/sections" class="dropdown-item">Sections</router-link></li>
                 </ul>
                 </div>
                 <a class="nav-item nav-link " style="cursor: pointer; font-size: 17px; font-weight: 900; " @click="logout">LOGOUT</a>
@@ -36,9 +37,9 @@
 </template>
 
 <script >
-import { defineComponent, ref, onMounted } from 'vue';
+import { defineComponent, ref, onMounted, computed} from 'vue';
 import axios from "../axios"
-import { useRoute } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router';
 
 export default defineComponent({
 components:{},
@@ -51,13 +52,37 @@ props: {
 setup(props){
 
     const isLoggedIn = ref(false)
+    const loading = ref(false)
+    const isAdmin = ref(false)
+    const isHeadTeacher = ref(false)
     const route = useRoute()
+    const router = useRouter()
+    const authUser = ref()
     var self = this;
 
     onMounted(() =>{
         isLoggedIn.value = window.window.Laravel.isLoggedin
+        if(!route.path.includes('/attendance')){
+        axios.get('/api/page/auth_user')
+                    .then(response => {
+                        console.log(response.data)
+                        isAdmin.value = response.data.role.role_name === 'Administrator' ? true:false
+                        isHeadTeacher.value = response.data.role.role_name === 'Head Teacher' ? true:false
+                        authUser.value = response.data
+                        loading.value = true
+                    })
+                    .catch(function (error) {
+                       false
+                    })
+                }
+
     })
+
     
+    const editRecord = () => {
+            router.push({path: '/profile/' +  authUser.value.id,
+            })
+    }
 
     
     const logout = (e)=>{
@@ -80,7 +105,12 @@ setup(props){
     }
     return {
         isLoggedIn,
-        logout
+        isAdmin,
+        isHeadTeacher,
+        authUser,
+        loading,
+        logout,
+        editRecord
     }
 }
 })

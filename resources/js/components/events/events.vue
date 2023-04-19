@@ -16,7 +16,7 @@
                     <a-button   class="btn btn-sm buttonshow mr-1" @click="setEvent()">
                         Set Event
                     </a-button>
-                    <a-switch @click="setswitch()" :loading="switchloading" checked-children="ON A-System" un-checked-children="OFF A-System" v-model:checked="switch_form.isSet" />
+                    <a-switch @click="setswitch()" :loading="switchloading" checked-children="ON System" un-checked-children="OFF System" v-model:checked="switch_form.isSet" />
                     </div>
                        
                 </div>

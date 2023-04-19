@@ -176,7 +176,12 @@ if(isAssigned.value){
                 icon: "success",
                 title: response.data.message,
                 showConfirmButton: true,
-                });  
+                });
+                form.name = ''
+                form.password = ''
+                form.email = ''
+                form.role_type_id =''
+                form.section = ''  
                 }
                      
             })
@@ -235,7 +240,7 @@ if(isAssigned.value){
                 console.log(error);
             });
         //get grade and section
-            axios.get('/api/page/all_section')
+            axios.get('/api/page/all_section_noRestrict')
             .then(response => {
                 option_grade_section.value = response.data
             })

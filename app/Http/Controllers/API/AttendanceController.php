@@ -6,6 +6,7 @@ use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
@@ -114,6 +115,42 @@ class AttendanceController extends Controller
 
     }
 
+    public function getstudentattendance(Request $request)
+    {
+        $params = $request->all();
+
+        $orderByColumn = 'updated_at';
+        $direction = 'DESC';
+        $limit = 15;
+
+        $user = Auth::user();
+
+
+        if (isset($params['limit'])) {
+            $limit = $params['limit'];
+        }
+        if (isset($params['search']) ) {
+            $search = $params['search'];
+            if($params['forall'] == 'false'){
+            $query = Attendance::where('stud_lrn',$params['id'])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+            }else{
+                $query = Attendance::where('section_id',$params['id'])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+            }
+         }else{
+            if($params['forall'] == 'false'){
+            $query = Attendance::where('stud_lrn',$params['id'])->where('event_id',$params['event_id'])->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+            }else{
+                $query = Attendance::where('section_id',$params['id'])->where('event_id',$params['event_id'])->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);  
+            }
+        }
+
+        return response()->json([
+            'message' => 'Student Attendance Fetch Successfully',
+            'data' => $query
+        ], 200);
+
+
+    }
     public function show($id)
     {
         $post = Student::with('section')->find($id);

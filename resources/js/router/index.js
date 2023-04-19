@@ -4,6 +4,7 @@ import {createWebHistory, createRouter} from "vue-router";
 import Login from '../pages/Login';
 import Attendance from '../components/attendance/Form';
 import Dashboard from '../components/Dashboard';
+import Profile from '../components/Profile';
 
 
 export const routes = [
@@ -32,6 +33,11 @@ export const routes = [
                 name: 'students',
                 path: '/students',
                 component: ()=> import("../components/students/students.vue")
+            },
+            {
+                name: 'profile',
+                path: '/profile/:id',
+                component: ()=> import("../components/Profile.vue")
             },
             {
                 name: 'create-students',
@@ -125,6 +131,18 @@ export const routes = [
                 name: 'edit-users',
                 path: '/edit/users/:id',
                 component: ()=> import("../components/users/Form.vue"),
+            },
+            {
+                name: 'students-report',
+                path: '/students-report/:id',
+                component: ()=> import("../components/reports/students_report/student_report.vue"),
+                props:true
+            },
+            {
+                name: 'per-student-report',
+                path: '/per-student-report/:id',
+                component: ()=> import("../components/reports/per_student_reports/per_student_reports.vue"),
+                props:true
             },
            
         ]

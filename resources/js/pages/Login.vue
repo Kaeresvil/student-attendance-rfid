@@ -4,11 +4,7 @@
         <div class="row d-flex justify-content-center align-items-center jutify-content-center">
             <div class="col-md-8">
 
-                <div v-if="error !== null" class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                
-                    <strong>{{error}}</strong>
-                </div>
+               
                 
                 <div class="min-h-screen flex flex-col items-center justify-center bg-gray-300">
                     <div class="mb-10">
@@ -17,6 +13,11 @@
                     <div class="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
                         <div class="">
                             <form>
+                                <div v-if="error !== null" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                
+                                    <strong>{{error}}</strong>
+                                </div>
                                 <div class="flex flex-col mb-6">
                                     <label for="email" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">E-Mail Address:</label>
                                     <div class="relative">
@@ -48,15 +49,17 @@
                                     </div>
                                 </div> -->
 
-                                <div class="flex w-full">
-                                    <button type="submit" @click="handleSubmit" class="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded py-2 w-full transition duration-150 ease-in">
+                                <div class="flex justify-center items-center">
+                                    <!-- <a-button type="submit" @click="handleSubmit" class="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded py-2 w-full transition duration-150 ease-in">
                                         <span class="mr-2 uppercase">Login</span>
                                         <span>
                                             <svg class="h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                         </span>
-                                    </button>
+                                    </a-button> -->
+
+                                    <a-button type="primary" @click="handleSubmit" :loading="issubmit">Login</a-button>
                                 </div>
                             </form>
                         </div>
@@ -82,7 +85,8 @@ import Swal from "sweetalert2";
                 email: "",
                 password: "",
                 isOn: "",
-                error: null
+                error: null,
+                issubmit: false
             }
         },
         methods: {
@@ -91,26 +95,28 @@ import Swal from "sweetalert2";
             axios.get('/api/getswitch')
                 .then(response => {
                     this.isOn =  response.data.isSet === 1? true:false
+                    if(this.isOn){
+                    this.$router.push('/attendance')
+                    }else{
+                        Swal.fire({
+                    icon: "error",
+                    title: 'Attendance System is not Available this time!',
+                    text: 'Please try again later',
+                    showConfirmButton: true,
+                });     
+                    }
                 })
                 .catch(function(error) {
                     console.log(error);
                 }); 
-                if(this.isOn){
-                    this.$router.push('/attendance')
-                }else{
-                    Swal.fire({
-                icon: "error",
-                title: 'Attendance System is not Available this time!',
-                text: 'Please try again later',
-                showConfirmButton: true,
-               });     
-                }
+               
             
             },
          
             handleSubmit(e) {
                 e.preventDefault()
                 if(this.password.length > 0) {
+                    this.issubmit = true
                  axios.get('/sanctum/csrf-cookie').then(response => {
                      axios.post('api/login', {
                             email: this.email,
@@ -118,13 +124,16 @@ import Swal from "sweetalert2";
                         })
                         .then(response => {
                             if (response.data.success) {
-                                this.$router.go('/home')
+                                this.$router.go('/reports')
+                                this.issubmit = false
                             } else {
                                 this.error = response.data.message
+                                this.issubmit = false
                             }
                         })
                         .catch(function (error) {
                             console.error(error);
+                            this.issubmit = false
                         });
                     })
                 }
@@ -133,7 +142,7 @@ import Swal from "sweetalert2";
         
         beforeRouteEnter(to, from, next) {
             if (window.Laravel.isLoggedin) {
-                return next('home');
+                return next('reports');
             }
             next();
         }

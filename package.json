@@ -27,11 +27,14 @@
     "dependencies": {
         "@ant-design/icons-vue": "^6.1.0",
         "ant-design-vue": "^3.2.15",
+        "apexcharts": "^3.37.2",
         "flowbite-datepicker": "^1.2.2",
+        "moment": "^2.29.4",
         "sweetalert2": "^11.7.3",
         "vue": "^3.2.36",
         "vue-moment": "^4.1.0",
         "vue-router": "^4.0.13",
+        "vue3-apexcharts": "^1.4.1",
         "vuex": "^4.0.2"
     }
 }

@@ -60,6 +60,12 @@ class UserController extends Controller
         return response()->json($user);
     }
 
+    public function AuthUser()
+    {
+         $user = Auth::user();
+        return response()->json($user);
+    }
+
 
     public function Uupdate( Request $request , $id)
     {
@@ -149,6 +155,72 @@ class UserController extends Controller
 
 
 
+    public function profileUpdate(Request $request,$id)
+    {
+    
+        $request->validate([
+            'name' => ['required', 'string', 'max:255','unique:users,email,$request->id,id'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$request->id],
+        ]);
+       
+
+                $user = User::find($id);
+                if($request->old_password != ''){
+                    if(Hash::check($request->old_password,$user->password)){
+                        $request->validate([
+                            'password' => ['string', 'min:8'],
+                            'confirmpassword' => ['string', 'min:8'],
+                        ]);
+                        $user->name = $request->name;
+                        $user->email = $request->email;
+                        $user->password = Hash::make($request->password);
+                    }else{
+                        $response = [
+                            'success' => false,
+                            'message' => 'Old Password does not match!',
+                    
+                        ];
+                
+                      
+                        return response()->json($response);
+                    }
+                }else{
+                    $user->name = $request->name;
+                    $user->email = $request->email;
+                }
+  
+                  if($request->password == $request->confirmpassword){
+
+                 
+              if( $user->update()){
+                $locations = $request->section;
+                foreach ($locations as $location) {
+                    UserSection::whereNotIn('section_id', $locations)->where('user_id', '=', $user->id)->delete();
+                    UserSection::firstOrCreate([
+                        'section_id' => $location,
+                        'user_id' => $user->id,
+                    ]);
+                }
+                $success = true;
+                $message = "User Updated Successfully";
+              }
+
+            }else{
+                $success = false;
+                $message = "Password does not match!";
+            }
+
+            $response = [
+                'success' => $success,
+                'message' => $message,
+        
+            ];
+    
+          
+            return response()->json($response);
+    
+
+    }
     public function register(Request $request)
     {
     
