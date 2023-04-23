@@ -66,8 +66,8 @@ setup(props){
         axios.get('/api/page/auth_user')
                     .then(response => {
                         console.log(response.data)
-                        isAdmin.value = response.data.role.role_name === 'Administrator' ? true:false
-                        isHeadTeacher.value = response.data.role.role_name === 'Head Teacher' ? true:false
+                        isAdmin.value = response.data.role.code === 'Administrator' ? true:false
+                        isHeadTeacher.value = response.data.role.code === 'Head Teacher' ? true:false
                         authUser.value = response.data
                         loading.value = true
                     })

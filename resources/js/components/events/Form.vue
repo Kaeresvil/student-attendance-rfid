@@ -26,12 +26,12 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row mt-1">
+                            <!-- <div class="form-group row mt-1">
                                 <label for="event_date" class="col-sm-4 col-form-label text-md-right">Date</label>
                                 <div class="col-md-8 mt-2">
                                     <input id="event_date" type="date" class="form-control" name="event_date" v-model="form.event_date" required >
                                 </div>
-                            </div>
+                            </div> -->
 
 
                             <div class="form-group row mt-1">
@@ -77,7 +77,6 @@ export default defineComponent({
         const form = reactive({
         id: '',
         event_name: '',
-        event_date: '',
         event_description: ''
         })
 

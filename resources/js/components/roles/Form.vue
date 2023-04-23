@@ -29,6 +29,12 @@
                                 </div>
 
                                 <div class="form-group mb-2">
+                                    <label>Code</label><span class="text-danger"> *</span>
+                                    <input type="text" :disabled="isdisabled" class="form-control" v-model="form.code" placeholder="Enter role code">
+                                </div>
+      
+
+                                <div class="form-group mb-2">
                                     <label>Description</label><span class="text-danger"> *</span>
                                     <textarea class="form-control"  v-model="form.description" placeholder="Enter description"  style="height: 100px"></textarea>
                                 </div>
@@ -60,9 +66,11 @@ components:{},
 setup(){
     const route = useRoute()
     const router = useRouter()
+    const isdisabled = ref(false)
     const form = reactive({
         id: "",
         role_name: "",
+        code: "",
         description:"",
     })
 
@@ -89,6 +97,7 @@ setup(){
             showConfirmButton: true,
           });   
                  form.role_name = '';           
+                 form.code = '';           
                 form.description = '';                            
             })
             .catch(function (error) {
@@ -122,7 +131,10 @@ setup(){
                     .then(response => {
                         form.id = response.data.id
                         form.role_name = response.data.role_name
+                        form.code = response.data.code
                         form.description = response.data.description
+                        isdisabled.value = true
+                        console.log(response.data);
                     })
                     .catch(function(error) {
                         console.log(error);
@@ -132,6 +144,7 @@ setup(){
     })
     return {
         form,
+        isdisabled,
 
         handling,
         deleteRecord

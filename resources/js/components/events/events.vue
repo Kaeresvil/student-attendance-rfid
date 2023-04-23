@@ -134,10 +134,6 @@ setup(){
             dataIndex: 'event_name',
         },
         {
-            title: 'Event Date',
-            dataIndex: 'event_date',
-        },
-        {
             title: 'Set Event',
             dataIndex: 'event_date',
             slots: { customRender: 'isSet' },

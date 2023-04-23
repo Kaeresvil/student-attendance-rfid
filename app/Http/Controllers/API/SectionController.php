@@ -59,6 +59,8 @@ class SectionController extends Controller
         }else{
             if (count($allSectionsId) > 0) {
             $query = Section::whereIn('id',$allSectionsId)->with('grade_level')->orderBy($orderByColumn, $direction)->paginate($limit);
+            }else{
+                $query = [];
             }
         }
 
@@ -73,6 +75,8 @@ class SectionController extends Controller
         $allSectionsId = $user->allSectionsId();
         if (count($allSectionsId) > 0) { 
         $grade = Section::whereIn('id',$allSectionsId)->with('grade_level')->get()->toArray();
+        }else{
+            $grade = [];
         }
         return array_reverse($grade);
     }

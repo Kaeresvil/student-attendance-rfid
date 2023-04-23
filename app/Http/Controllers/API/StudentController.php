@@ -37,9 +37,8 @@ class StudentController extends Controller
         }else{
             $query = Student::whereIn('grade_section_id',$allSectionsId)->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
         }
-
-
-
+        }else{
+            $query = [];
         }
 
 

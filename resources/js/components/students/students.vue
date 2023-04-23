@@ -15,9 +15,9 @@
                     <a-button  class="btn btn-sm buttonshow" :disabled="!hasSelected" @click="changeBTN">
                         Change
                     </a-button>
-                    <a-button  class="btn btn-sm danger ml-1 buttondelete" :disabled="!hasSelected" @click="changeBTN">
+                    <!-- <a-button  class="btn btn-sm danger ml-1 buttondelete" :disabled="!hasSelected" @click="changeBTN">
                         Delete
-                    </a-button>
+                    </a-button> -->
                     </div>
                 </div>
 

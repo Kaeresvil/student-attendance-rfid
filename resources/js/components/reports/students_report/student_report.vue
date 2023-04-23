@@ -222,6 +222,7 @@ import PieChart from "../components/PieChart.vue"
 import BarChart from "../components/BarChart.vue"
 import { useRouter, useRoute } from 'vue-router'
 import moment from 'moment';
+import { Modal } from 'ant-design-vue';
 
 import axios from "../../../axios"
 export default defineComponent({
@@ -349,25 +350,58 @@ export default defineComponent({
         const reportsHandling = () => {
             visible2.value = true;
     }
+    const validateField = () => {
+        if (formData.event_id === "" || formData.date_format === "" || formData.date === ""){
 
-    const weeklyFrom = ref();
-    const weeklyTo = ref();
+        Modal.error({
+            title: () => 'Error!',
+            content: () => 'Please complete all fields ',
+        });
+            return false
+        }
+        return true
+           
+    }
+
+
 
     const handleOk = e => {
+        if (validateField()){
+        let dateFormat = ref()
+            if(formData.date_format === "weekly"){
+                dateFormat.value = 'week'
+            }else if(formData.date_format === "monthly"){
+                dateFormat.value = 'month'
+            }
+        const dateFrom = ref();
+        const dateTo = ref();
+        
+        if(formData.date_format != 'daily'){
+        dateFrom.value =  moment(formData.date.$d).startOf(dateFormat.value).format("YYYY-MM-DD")
+        dateTo.value =  moment(formData.date.$d).endOf( dateFormat.value ).format("YYYY-MM-DD")
+        }else{
+        dateFrom.value =  moment(formData.date.$d).format("YYYY-MM-DD")
+        dateTo.value =  moment(formData.date.$d).format("YYYY-MM-DD")
+        }
+
       visible.value = false;
       let id =  visible2.value ? route.params.id:stud_id.value
       router.push({path: '/per-student-report/' + id,
       query: {event: event_name.value, 
         event_id:formData.event_id, 
         date_format: formData.date_format,
+        dateFrom: dateFrom.value,
+        dateTo: dateTo.value,
         forALL:visible2.value}
             })
         visible2.value = false;
-    //   console.log('FormData',formData.date.$d)
-    //   console.log('dateFrom', moment(formData.date.$d).startOf('week').format("YYYY-MM-DD"))
-    //   console.log('dateTO',moment(formData.date.$d).endOf('week'))
-      weeklyFrom.value =  moment(formData.date.$d).startOf('week').format("YYYY-MM-DD")
-      weeklyTo.value =  moment(formData.date.$d).endOf('week').format("YYYY-MM-DD")
+        formData.value.event_id = ""
+        formData.value.date_format = ""
+        formData.value.date = ""
+        // console.log('dateFrom', dateFrom.value)
+        // console.log('dateTo', dateTo.value)
+        }
+
     };
     const handleEvent = e => {
         event_name.value = e

@@ -119,7 +119,7 @@ class AttendanceController extends Controller
     {
         $params = $request->all();
 
-        $orderByColumn = 'updated_at';
+        $orderByColumn = 'created_at';
         $direction = 'DESC';
         $limit = 15;
 
@@ -132,15 +132,31 @@ class AttendanceController extends Controller
         if (isset($params['search']) ) {
             $search = $params['search'];
             if($params['forall'] == 'false'){
-            $query = Attendance::where('stud_lrn',$params['id'])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+                if($params['dateFormat'] != 'daily'){
+                $query = Attendance::where('stud_lrn',$params['id'])->whereBetween('created_at', [$params['dateFrom'], $params['dateTo']])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+                }else{
+                $query = Attendance::where('stud_lrn',$params['id'])->whereDate('created_at',$params['dateFrom'])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);   
+                }
             }else{
-                $query = Attendance::where('section_id',$params['id'])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+                if($params['dateFormat'] != 'daily'){
+                $query = Attendance::where('section_id',$params['id'])->whereBetween('created_at', [$params['dateFrom'], $params['dateTo']])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+                }else{
+                  $query = Attendance::where('section_id',$params['id'])->whereDate('created_at',$params['dateFrom'])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);   
+                }
             }
          }else{
             if($params['forall'] == 'false'){
-            $query = Attendance::where('stud_lrn',$params['id'])->where('event_id',$params['event_id'])->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+                if($params['dateFormat'] != 'daily'){
+                 $query = Attendance::where('stud_lrn',$params['id'])->where('event_id',$params['event_id'])->whereBetween('created_at', [$params['dateFrom'], $params['dateTo']])->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+                }else{
+                    $query = Attendance::where('stud_lrn',$params['id'])->where('event_id',$params['event_id'])->whereDate('created_at', $params['dateFrom'])->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+                }
             }else{
-                $query = Attendance::where('section_id',$params['id'])->where('event_id',$params['event_id'])->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);  
+                if($params['dateFormat'] != 'daily'){
+                $query = Attendance::where('section_id',$params['id'])->where('event_id',$params['event_id'])->whereBetween('created_at', [$params['dateFrom'], $params['dateTo']])->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit); 
+                }else{
+                    $query = Attendance::where('section_id',$params['id'])->where('event_id',$params['event_id'])->whereDate('created_at',$params['dateFrom'])->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);  
+                } 
             }
         }
 

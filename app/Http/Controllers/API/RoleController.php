@@ -53,6 +53,7 @@ class RoleController extends Controller
             $role->id = 2;
         }
         $role->role_name = $request->role_name;
+        $role->code = $request->code;
         $role->description = $request->description;      
          $role->save();
          return response()->json(['success'=> 'Role Created Successfully']);
@@ -78,6 +79,7 @@ class RoleController extends Controller
 
         $role = Role::find($id);
         $role->role_name = $request->role_name;
+        $role->code = $request->code;
         $role->description = $request->description;
         $role->update();
 

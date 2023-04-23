@@ -21,7 +21,7 @@ class EventController extends Controller
         }
         if (isset($params['search'])) {
             $search = $params['search'];
-            $query = Event::where('event_name', 'LIKE', '%'.$search.'%')->orwhere('event_date', 'LIKE', '%'.$search.'%')->orderBy($orderByColumn, $direction)->paginate($limit);
+            $query = Event::where('event_name', 'LIKE', '%'.$search.'%')->orderBy($orderByColumn, $direction)->paginate($limit);
         }else{
             $query = Event::orderBy($orderByColumn, $direction)->paginate($limit);
         }
@@ -66,7 +66,6 @@ class EventController extends Controller
     {
         $request->validate([
             'event_name' => 'required',
-            'event_date' => 'required',
             'event_description' => 'required',
         ]);
 

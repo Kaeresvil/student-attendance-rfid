@@ -158,6 +158,9 @@ export default defineComponent({
         id: route.params.id,
         event_id: route.query.event_id,
         forall: route.query.forALL,
+        dateFrom: route.query.dateFrom,
+        dateTo: route.query.dateTo,
+        dateFormat: route.query.date_format,
         limit: 15,
         search: "",
         });
@@ -225,7 +228,7 @@ export default defineComponent({
 
 
 
-        const index = (payload = {page: 1, id: route.params.id, event_id: route.query.event_id, forall: route.query.forALL}) => {
+        const index = (payload = {page: 1, id: route.params.id, event_id: route.query.event_id, forall: route.query.forALL,  dateFrom: route.query.dateFrom,  dateTo: route.query.dateTo, dateFormat: route.query.date_format}) => {
             loading.value = true;
             // payload = {section: route.params.id}
             axios.get('/api/page/get/student/attendance', {params: {...payload}})
