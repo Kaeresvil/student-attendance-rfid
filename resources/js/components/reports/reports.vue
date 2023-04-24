@@ -1,13 +1,14 @@
 <template>
     <div class="div_conrainer" style="margin:0 2% 0 2%;">
            <div class="row g-2 justify-content-center">
-               <div class="col-6 mr-5" style="background-color: white; width: fit-content; border-radius: 8px 8px; border: 1px solid #e1e1e1">
+               <!-- <div class="col-6 mr-5" style="background-color: white; width: fit-content; border-radius: 8px 8px; border: 1px solid #e1e1e1">
                  
                   <GroupBarChart></GroupBarChart>
-               </div>
+               </div> -->
                    <div class="col-6 mr-5" style="background-color: white; width: fit-content; border-radius: 8px 8px;border: 1px solid #e1e1e1">
               
                     <PieChart></PieChart>
+                    <h2 style="text-align: center;">Month of April</h2>
                  </div>
                    <div class="col-6" style="background-color: white; width: fit-content; border-radius: 8px 8px;border: 1px solid #e1e1e1">
               

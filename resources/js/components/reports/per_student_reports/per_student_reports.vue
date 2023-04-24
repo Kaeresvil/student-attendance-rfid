@@ -52,7 +52,7 @@
                         :loading="loading"
                         style="overflow-x: auto"
                     >
-
+<!-- 
                     <template v-slot:action="{ record }">
                         <a-button
                         class="buttonshow"
@@ -61,7 +61,7 @@
                         >
                     View
                         </a-button>
-                    </template>
+                    </template> -->
                     <template v-slot:grade="{ record }">
                         <span>{{ record.grade_level.grade_level }}</span>
                     </template>
@@ -218,12 +218,7 @@ export default defineComponent({
             slots: { customRender: 'remarks' },
             align: 'center'
         },
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            slots: { customRender: 'action' },
-            align: 'center'
-        },
+
         ];
 
 

@@ -16,6 +16,11 @@ class GradeLevel extends Model
 
     public $searchable = ['grade_level', 'description'];
 
+    public function sections()
+    {
+      return $this->hasMany(Section::class, 'grade_level_id', 'id');
+    }
+
     public static function searchable()
     {
         return ['grade_level', 'description'];

@@ -97,5 +97,7 @@ Route::group(['prefix' => 'page','middleware' => 'auth:sanctum'], function() {
 
     //// routes for reports
     Route::get('/get/student/attendance', [AttendanceController::class, 'getstudentattendance']);
+    Route::get('/attendance/groupBar', [AttendanceController::class, 'groupBarChart']);
+    Route::get('/attendance/PieChart', [AttendanceController::class, 'PieChart']);
 
 });

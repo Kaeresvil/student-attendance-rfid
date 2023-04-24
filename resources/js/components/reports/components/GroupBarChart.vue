@@ -10,26 +10,18 @@
   </template>
 <script>
 import VueApexCharts from "vue3-apexcharts";
+import { defineComponent, ref, onMounted, reactive,toRefs } from 'vue';
+import axios from "../../../axios"
 
-export default {
+export default defineComponent({
     components: {
           apexchart: VueApexCharts,
         },
-  data: function() {
-    return {
 
-        series: [{
-          name: "On Time",
-            data: [44, 55, 41, 64]
-          }, {
-            name: "Late",
-            data: [53, 32, 33, 52]
-          },{
-            name: "Absent",
-            data: [51, 31, 31, 52]
-          },
-        ],
-          chartOptions: {
+        setup(){
+          const series = ref([])
+          const grades = ref([])
+          const chartOptions = ref({
             chart: {
               type: 'bar',
               height: 430
@@ -64,15 +56,44 @@ export default {
               intersect: false
             },
             xaxis: {
-              categories: ['Grade 7', 'Grade 8', 'Grade 9', 'Grade 10'],
+              categories:  grades,
             },
-          },
-          
+          })
+        
+
+          const index = () => {
+            axios.get('/api/page/attendance/groupBar')
+                    .then(response => {
+                      grades.value = response.data.grade
+                      updateChar(grades)
+                      console.log('res', chartOptions.value.xaxis.categories = response.data.grade)
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+
+          }
+
+          const updateChar = (data) => {
+            chartOptions.value = {
+              ...chartOptions.value,
+              xaxis: {
+              categories: data
+            }
+            }
+          }
+
+          onMounted(index)
+
+        return {
+          series,
+          chartOptions,
+          grades
+        }
+      }
 
 
-    };
-  },
-};
+});
 </script>
 <style scoped>
 </style>

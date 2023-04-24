@@ -5,21 +5,23 @@
   </template>
 <script>
 import VueApexCharts from "vue3-apexcharts";
+import { defineComponent, ref, onMounted, reactive,toRefs } from 'vue';
+import axios from "../../../axios"
 
-export default {
+export default defineComponent({
     components: {
           apexchart: VueApexCharts,
         },
-  data: function() {
-    return {
-      series: [25, 15, 44,],
-          chartOptions: {
+
+        setup(){
+          const series = ref([])
+          const chartOptions = ref({
             chart: {
-              width: "50%",
-              height: 350,
+              width: "60%",
+              height: 500,
               type: 'pie',
             },
-            labels: ["Absent", "Late", "On Time"],
+            labels: ["On Time", "Late"],
             theme: {
               monochrome: {
                 enabled: true
@@ -45,11 +47,39 @@ export default {
             legend: {
               show: false
             }
-          },
-          
-    };
-  },
-};
+          })
+        
+
+          const index = () => {
+            axios.get('/api/page/attendance/PieChart')
+                    .then(response => {
+                      series.value = response.data.series
+                      console.log('res',response.data)
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+
+          }
+
+          // const updateChar = (data) => {
+          //   chartOptions.value = {
+          //     ...chartOptions.value,
+          //     xaxis: {
+          //     categories: data
+          //   }
+          //   }
+          // }
+
+          onMounted(index)
+
+        return {
+          series,
+          chartOptions,
+        }
+
+      }
+});
 </script>
 <style scoped>
 </style>

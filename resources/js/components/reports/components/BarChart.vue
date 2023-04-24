@@ -23,7 +23,7 @@ export default {
           id: "vuechart-example",
         },
         xaxis: {
-          categories: ["On Time Students", "Late Comers", "Absentees",],
+          categories: ["On Time", "Late", "Absent",],
         },
         title: {
               text: "Total Students Accumulated at School (Today)",
@@ -34,10 +34,6 @@ export default {
         {
           name: "Total Students",
           data: [805, 1000, 0,],
-        },
-        {
-          name: "Percentage",
-          data: [80, 100, 0,],
         },
       ],
           

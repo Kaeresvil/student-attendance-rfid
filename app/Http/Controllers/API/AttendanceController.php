@@ -6,6 +6,9 @@ use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Attendance;
+use App\Models\GradeLevel;
+use App\Models\Section;
+use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
@@ -188,5 +191,75 @@ class AttendanceController extends Controller
 
         return response()->json(['success'=> 'Student Updated Successfully']);
     }
+
+    public function groupBarChart()
+    {
+        $user = Auth::user();
+        $allSectionsId = $user->allSectionsId();
+
+        $grades = GradeLevel::all();
+
+        $sections = Section::all();
+
+        $gradelevel = [];
+
+        $Series = [];
+        $OnTime = [];
+        $Late = [];
+        $Absentees = [];
+
+
+
+
+        foreach($grades as $grade){
+
+            foreach($sections as $section){
+                $attendances = Attendance::where('section_id', $section->id)->get();
+
+            }
+            if($section->grade_level_id === $grade->id){
+                array_push($OnTime, $attendances->count());
+            }else{
+                array_push($OnTime, 0);
+            }
+
+        array_push($gradelevel, $grade->grade_level);
+        }
+
+
+
+
+
+        return response()->json([
+            'success'=> 'Student Updated Successfully', 
+            'grade' => $gradelevel,
+            'attendance' => $OnTime
+    
+    ]);
+    }
+    public function PieChart()
+    {
+        $dateFrom = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $dateTo = Carbon::now()->endOfMonth()->format('Y-m-d');
+        $timeTo ='17:26:17';
+        $students = Student::all();
+
+                $Ontime = Attendance::whereTime('am_time_in','<',$timeTo)->whereBetween('created_at',[ $dateFrom, $dateTo])->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+                $Late = Attendance::whereTime('am_time_in','>',$timeTo)->whereBetween('created_at',[ $dateFrom, $dateTo])->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+
+
+
+        return response()->json([
+            'success'=> 'Student Updated Successfully', 
+            'series' => [$Ontime->count(),$Late->count(),],
+    
+    ]);
+    }
+
+
 
 }

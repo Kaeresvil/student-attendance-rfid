@@ -79,11 +79,13 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, reactive } from 'vue';
+import { defineComponent, ref, onMounted, reactive, createVNode } from 'vue';
 import axios from "../../axios"
 import Swal from "sweetalert2";
 import { useRoute, useRouter} from 'vue-router'
 import router from '../../router';
+import { Modal } from 'ant-design-vue';
+import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 
 export default defineComponent({
 components:{},
@@ -209,8 +211,16 @@ if(isAssigned.value){
     }
 
     const deleteRecord = (id) =>{
+
+        Modal.confirm({
+        title: 'Reminder!',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: 'If you delete this student all attendance reports will also be deleted.',
+        onOk() {
+          return new Promise((resolve, reject) => {
                 axios.delete(`/api/page/studentdelete/${id}`)
                 .then(response => {
+                    setTimeout(Math.random() > 0.5 ? resolve : reject, 500);
                     Swal.fire({
                     icon: "success",
                     title: response.data.success,
@@ -221,6 +231,14 @@ if(isAssigned.value){
                 .catch(function(error) {
                         console.log(error)
                 });
+
+           
+          }).catch(() => console.log('Oops errors!'));
+        },
+
+        onCancel() {},
+      });
+                
     }
  
 

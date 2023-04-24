@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use App\Models\Attendance;
 use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
@@ -62,14 +63,20 @@ class StudentController extends Controller
    
         $students = $request->_value;
         $stud_id = [];
+        $stud_lrn = [];
         foreach($students as $student){
             array_push($stud_id, $student['id']);
+            array_push($stud_lrn, $student['lrn']);
             
         }
 
         Student::whereIn("id", $stud_id)
         ->update([
             'grade_section_id' => $request->section_id,
+        ]);
+        Attendance::whereIn("stud_lrn", $stud_lrn)
+        ->update([
+            'section_id' => $request->section_id,
         ]);
 
         return response()->json(['success'=> 'Student Updated Successfully']);
@@ -111,6 +118,11 @@ class StudentController extends Controller
         $input = $request->all();
         $post->update($input);
 
+        Attendance::where("stud_lrn", $request->lrn)
+        ->update([
+            'section_id' => $request->grade_section_id,
+        ]);
+
         return response()->json(['success'=> 'Student Updated Successfully']);
     }
 
@@ -118,6 +130,9 @@ class StudentController extends Controller
     {
         $post = Student::find($id);
         $post->delete();
+
+        Attendance::where("stud_lrn", $post->lrn)
+        ->delete();
         return response()->json(['success'=> 'Student Deleted Successfully']);
 
     } 
