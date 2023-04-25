@@ -5,14 +5,14 @@
                  
                   <GroupBarChart></GroupBarChart>
                </div> -->
-                   <div class="col-6 mr-5" style="background-color: white; width: fit-content; border-radius: 8px 8px;border: 1px solid #e1e1e1">
+                   <!-- <div class="col-6 mr-5" style="background-color: white; width: fit-content; border-radius: 8px 8px;border: 1px solid #e1e1e1">
               
                     <PieChart></PieChart>
                  </div>
                    <div class="col-6" style="background-color: white; width: fit-content; border-radius: 8px 8px;border: 1px solid #e1e1e1">
               
                     <BarChart></BarChart>
-                 </div>
+                 </div> -->
 
 
         <div class="conrainer" style="margin:20px 4% 10px 4%;">

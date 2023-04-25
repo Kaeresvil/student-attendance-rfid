@@ -99,5 +99,6 @@ Route::group(['prefix' => 'page','middleware' => 'auth:sanctum'], function() {
     Route::get('/get/student/attendance', [AttendanceController::class, 'getstudentattendance']);
     Route::get('/attendance/groupBar', [AttendanceController::class, 'groupBarChart']);
     Route::get('/attendance/PieChart', [AttendanceController::class, 'PieChart']);
+    Route::get('/attendance/BarChart', [AttendanceController::class, 'BarChart']);
 
 });

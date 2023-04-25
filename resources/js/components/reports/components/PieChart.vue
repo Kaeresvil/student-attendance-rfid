@@ -8,12 +8,16 @@ import VueApexCharts from "vue3-apexcharts";
 import { defineComponent, ref, onMounted, reactive,toRefs } from 'vue';
 import axios from "../../../axios"
 
+import { useRouter,useRoute } from 'vue-router'
+
 export default defineComponent({
     components: {
           apexchart: VueApexCharts,
         },
 
         setup(){
+          const router = useRouter()
+          const route = useRoute()
           const series = ref([])
           const chartOptions = ref({
             chart: {
@@ -35,7 +39,7 @@ export default defineComponent({
               }
             },
             title: {
-              text: "Student Event's Report (Class Attendance)",
+              text: "All Student Report (Class Attendance)",
               align: "center"
             },
             dataLabels: {
@@ -50,8 +54,15 @@ export default defineComponent({
           })
         
 
-          const index = () => {
-            axios.get('/api/page/attendance/PieChart')
+          const index = ( payload = {type: '', section: ''}) => {
+          
+            if(route.path.includes('reports')){
+              payload = {type: 'reports', section: ''}
+            }else if(route.path.includes('students-report')){
+              payload = {type: 'students-reports', section: route.params.id}
+            }
+           console.log('[ath]', route.path.includes('reports'))
+            axios.get('/api/page/attendance/PieChart',{params: {...payload}})
                     .then(response => {
                       series.value = response.data.series
                       console.log('res',response.data)

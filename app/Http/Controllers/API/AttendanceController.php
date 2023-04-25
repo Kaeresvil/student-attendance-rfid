@@ -136,15 +136,15 @@ class AttendanceController extends Controller
             $search = $params['search'];
             if($params['forall'] == 'false'){
                 if($params['dateFormat'] != 'daily'){
-                $query = Attendance::where('stud_lrn',$params['id'])->whereBetween('created_at', [$params['dateFrom'], $params['dateTo']])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+                $query = Attendance::where('stud_lrn',$params['id'])->where('event_id',$params['event_id'])->whereBetween('created_at', [$params['dateFrom'], $params['dateTo']])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
                 }else{
-                $query = Attendance::where('stud_lrn',$params['id'])->whereDate('created_at',$params['dateFrom'])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);   
+                $query = Attendance::where('stud_lrn',$params['id'])->where('event_id',$params['event_id'])->whereDate('created_at',$params['dateFrom'])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);   
                 }
             }else{
                 if($params['dateFormat'] != 'daily'){
-                $query = Attendance::where('section_id',$params['id'])->whereBetween('created_at', [$params['dateFrom'], $params['dateTo']])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
+                $query = Attendance::where('section_id',$params['id'])->where('event_id',$params['event_id'])->whereBetween('created_at', [$params['dateFrom'], $params['dateTo']])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);
                 }else{
-                  $query = Attendance::where('section_id',$params['id'])->whereDate('created_at',$params['dateFrom'])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);   
+                  $query = Attendance::where('section_id',$params['id'])->where('event_id',$params['event_id'])->whereDate('created_at',$params['dateFrom'])->where('stud_lrn', 'LIKE', '%'.$search.'%')->with('student','event')->orderBy($orderByColumn, $direction)->paginate($limit);   
                 }
             }
          }else{
@@ -237,25 +237,74 @@ class AttendanceController extends Controller
     
     ]);
     }
-    public function PieChart()
+    public function PieChart(Request $request)
     {
+        $params = $request->all();
         $dateFrom = Carbon::now()->startOfMonth()->format('Y-m-d');
         $dateTo = Carbon::now()->endOfMonth()->format('Y-m-d');
-        $timeTo ='17:26:17';
+        $timeTo ='07:45:00';
         $students = Student::all();
-
+            if($params['type'] === 'reports'){
                 $Ontime = Attendance::whereTime('am_time_in','<',$timeTo)->whereBetween('created_at',[ $dateFrom, $dateTo])->whereHas('event', function($attendance){
                     $attendance->where('event_name', 'Class Attendance');
                 })->get();
                 $Late = Attendance::whereTime('am_time_in','>',$timeTo)->whereBetween('created_at',[ $dateFrom, $dateTo])->whereHas('event', function($attendance){
                     $attendance->where('event_name', 'Class Attendance');
                 })->get();
+            }else if($params['type'] === 'students-reports'){
+                $Ontime = Attendance::where('section_id',$params['section'])->whereTime('am_time_in','<',$timeTo)->whereBetween('created_at',[ $dateFrom, $dateTo])->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+                $Late = Attendance::where('section_id',$params['section'])->whereTime('am_time_in','>',$timeTo)->whereBetween('created_at',[ $dateFrom, $dateTo])->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+            }
 
 
 
         return response()->json([
             'success'=> 'Student Updated Successfully', 
             'series' => [$Ontime->count(),$Late->count(),],
+    
+    ]);
+    }
+
+    public function BarChart(Request $request)
+    {
+        $params = $request->all();
+        $now = Carbon::now()->format('Y-m-d');
+        // $dateTo = Carbon::now()->endOfMonth()->format('Y-m-d');
+        $timeTo ='07:45:00';
+      
+
+        if($params['type'] === 'reports'){
+            $students = Student::all();
+                $Ontime = Attendance::whereTime('am_time_in','<',$timeTo)->whereDate('created_at',$now)->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+                $Late = Attendance::whereTime('am_time_in','>',$timeTo)->whereDate('created_at',$now)->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+                $absent =  $students->count() - ($Ontime->count() + $Late->count());
+        }else if($params['type'] === 'students-reports'){
+            $students = Student::where('grade_section_id',$params['section'])->get();
+            $Ontime = Attendance::where('section_id',$params['section'])->whereTime('am_time_in','<',$timeTo)->whereDate('created_at',$now)->whereHas('event', function($attendance){
+                $attendance->where('event_name', 'Class Attendance');
+            })->get();
+            $Late = Attendance::where('section_id',$params['section'])->whereTime('am_time_in','>',$timeTo)->whereDate('created_at',$now)->whereHas('event', function($attendance){
+                $attendance->where('event_name', 'Class Attendance');
+            })->get();
+            $absent =  $students->count() - ($Ontime->count() + $Late->count());
+        }
+
+
+        return response()->json([
+            'success'=> 'Student Updated Successfully', 
+            '$now'=> $now, 
+            'series' => [[
+                'name'=> 'Total Students',
+                'data'=> [$Ontime->count(),$Late->count(),$absent]]
+            ]
     
     ]);
     }

@@ -10,38 +10,81 @@
   </template>
 <script>
 import VueApexCharts from "vue3-apexcharts";
-
-export default {
+import { defineComponent, ref, onMounted, reactive,toRefs } from 'vue';
+import axios from "../../../axios"
+import { useRouter,useRoute } from 'vue-router'
+export default defineComponent({
     components: {
           apexchart: VueApexCharts,
         },
-  data: function() {
-    return {
-
-        chartOptions: {
-        chart: {
-          id: "vuechart-example",
-        },
-        xaxis: {
-          categories: ["On Time", "Late", "Absent",],
-        },
-        title: {
-              text: "Total Students Accumulated at School (Today)",
-              align: "center",
+        setup(){
+          const series = ref([])
+          const route = useRoute()
+          const chartOptions = ref({
+            chart: {
+              id: "vuechart-example",
             },
-      },
-      series: [
-        {
-          name: "Total Students",
-          data: [805, 1000, 0,],
-        },
-      ],
+            xaxis: {
+              categories: ["On Time", "Late", "Absent",],
+            },
+            title: {
+                  text: "Total Students Accumulated at School (Today)",
+                  align: "center",
+                },
+          })
+
+          const index = ( payload = {type: '', section: ''}) => {
+
+            if(route.path.includes('reports')){
+              payload = {type: 'reports', section: ''}
+            }else if(route.path.includes('students-report')){
+              payload = {type: 'students-reports', section: route.params.id}
+            }
+            axios.get('/api/page/attendance/BarChart',{params: {...payload}})
+                    .then(response => {
+                      console.log('sr',response.data)
+                      series.value = response.data.series
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+
+          }
+
+          onMounted(index)
+
+        return {
+          series,
+          chartOptions,
+        }
+      }
+  // data: function() {
+  //   return {
+
+  //       chartOptions: {
+  //       chart: {
+  //         id: "vuechart-example",
+  //       },
+  //       xaxis: {
+  //         categories: ["On Time", "Late", "Absent",],
+  //       },
+  //       title: {
+  //             text: "Total Students Accumulated at School (Today)",
+  //             align: "center",
+  //           },
+  //     },
+  //     series: [
+  //       {
+  //         name: "Total Students",
+  //         data: [805, 1000, 0,],
+  //       },
+  //     ],
           
 
 
-    };
-  },
-};
+  //   };
+  // },
+});
 </script>
 <style scoped>
 </style>

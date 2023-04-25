@@ -28,10 +28,10 @@ class StudentController extends Controller
         }
         if (isset($params['search']) && $params['section'] != 1) {
             $search = $params['search'];
-            $query = Student::whereIn('grade_section_id',$allSectionsId)->where('grade_section_id', $params['section'])->where('name', 'LIKE', '%'.$search.'%')->orwhere('lrn', 'LIKE', '%'.$search.'%')->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
+            $query = Student::whereIn('grade_section_id',$allSectionsId)->where('grade_section_id', $params['section'])->where('name', 'LIKE', '%'.$search.'%')->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
         } else if (isset($params['search']) && $params['section'] == 1) {
             $search = $params['search'];
-            $query = Student::whereIn('grade_section_id',$allSectionsId)->where('name', 'LIKE', '%'.$search.'%')->orwhere('lrn', 'LIKE', '%'.$search.'%')->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
+            $query = Student::whereIn('grade_section_id',$allSectionsId)->where('name', 'LIKE', '%'.$search.'%')->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);
         }
         else if($params['section'] != 1){
             $query = Student::whereIn('grade_section_id',$allSectionsId)->where('grade_section_id', $params['section'])->with('section')->orderBy($orderByColumn, $direction)->paginate($limit);

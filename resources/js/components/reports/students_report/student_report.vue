@@ -8,6 +8,8 @@
                    <div class="col-6 mr-5" style="background-color: white; width: fit-content; border-radius: 8px 8px;border: 1px solid #e1e1e1">
               
                     <PieChart></PieChart>
+                    <h2 style="text-align: center; font-size: large">Month of {{ monthNow }}</h2>
+                    <h2 style="text-align: center; font-size: large">{{ this.$route.query.grade }} - {{ this.$route.query.section}}</h2>
                  </div>
                    <div class="col-6" style="background-color: white; width: fit-content; border-radius: 8px 8px;border: 1px solid #e1e1e1">
               
@@ -77,6 +79,13 @@
                     <!-- <template v-slot:total_student="{ record }">
                         <span>{{ record.extra.total_students }}</span>
                     </template> -->
+
+                    <template v-slot:remarks="{ record }">
+                        <a-tag :color="record.extra.isPresent ?  '#4BB543':'#dd4b39'">
+                            <span>{{ record.extra.isPresent ? 'Present':'Absent'}}</span>
+                        </a-tag>
+                      
+                    </template>
 
                     </a-table>
 
@@ -234,6 +243,7 @@ export default defineComponent({
 
     setup(){
         const router = useRouter()
+        const monthNow = moment().format('MMMM');
         const route = useRoute()
         const students = ref([])
         const events_option = ref([])
@@ -262,6 +272,11 @@ export default defineComponent({
         {
             title: 'Name',
             dataIndex: 'name',
+            align: 'center'
+        },
+        {
+            title: 'Attendance Today',
+            slots: { customRender: 'remarks' },
             align: 'center'
         },
         {
@@ -424,6 +439,7 @@ export default defineComponent({
         form,
         loading,
         columns,
+        monthNow,
 
         visible,
         visible2,

@@ -180,7 +180,7 @@ console.log(form)
                             form.section = ""
                             form.grade = ""
                             }, 3000)
-                            console.log('ssss')
+                          
                         }else if(response.data.status == 'success'){
                             visible_scanner.value = false   
                             setTimeout(() => { 
@@ -190,7 +190,7 @@ console.log(form)
                             form.name = ""
                             form.section = ""
                             form.grade = ""
-                            }, 4000)
+                            }, 3000)
                         }
                     })
 

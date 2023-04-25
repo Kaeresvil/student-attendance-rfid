@@ -8,7 +8,7 @@
                    <div class="col-6 mr-5" style="background-color: white; width: fit-content; border-radius: 8px 8px;border: 1px solid #e1e1e1">
               
                     <PieChart></PieChart>
-                    <h2 style="text-align: center;">Month of April</h2>
+                    <h2 style="text-align: center; font-size: large">Month of {{ monthNow }}</h2>
                  </div>
                    <div class="col-6" style="background-color: white; width: fit-content; border-radius: 8px 8px;border: 1px solid #e1e1e1">
               
@@ -115,6 +115,7 @@ import GroupBarChart from "./components/GroupBarChart.vue"
 import PieChart from "./components/PieChart.vue"
 import BarChart from "./components/BarChart.vue"
 import { useRouter } from 'vue-router'
+import moment from "moment"
 
 import axios from "../../axios"
 export default defineComponent({
@@ -126,6 +127,7 @@ export default defineComponent({
 
     setup(){
         const router = useRouter()
+        const monthNow = moment().format('MMMM');
         const sections = ref([])
         const loading = ref(true)
         const form = reactive({
@@ -218,7 +220,8 @@ export default defineComponent({
         sections,
         form,
         loading,
-        columns
+        columns,
+        monthNow
     }
 
     }
