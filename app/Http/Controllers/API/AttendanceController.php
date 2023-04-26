@@ -275,10 +275,12 @@ class AttendanceController extends Controller
         $now = Carbon::now()->format('Y-m-d');
         // $dateTo = Carbon::now()->endOfMonth()->format('Y-m-d');
         $timeTo ='07:45:00';
+        $timeToPM ='13:15:00';
       
 
         if($params['type'] === 'reports'){
             $students = Student::all();
+            if(Carbon::now()->format('H') <= 12){
                 $Ontime = Attendance::whereTime('am_time_in','<',$timeTo)->whereDate('created_at',$now)->whereHas('event', function($attendance){
                     $attendance->where('event_name', 'Class Attendance');
                 })->get();
@@ -286,8 +288,19 @@ class AttendanceController extends Controller
                     $attendance->where('event_name', 'Class Attendance');
                 })->get();
                 $absent =  $students->count() - ($Ontime->count() + $Late->count());
+            }
+            if(Carbon::now()->format('H') >= 13){
+                $Ontime = Attendance::whereTime('pm_time_in','<',$timeToPM)->whereDate('created_at',$now)->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+                $Late = Attendance::whereTime('pm_time_in','>',$timeToPM)->whereDate('created_at',$now)->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+                $absent =  $students->count() - ($Ontime->count() + $Late->count()); 
+            }
         }else if($params['type'] === 'students-reports'){
             $students = Student::where('grade_section_id',$params['section'])->get();
+         if(Carbon::now()->format('H') <= 12){
             $Ontime = Attendance::where('section_id',$params['section'])->whereTime('am_time_in','<',$timeTo)->whereDate('created_at',$now)->whereHas('event', function($attendance){
                 $attendance->where('event_name', 'Class Attendance');
             })->get();
@@ -296,6 +309,16 @@ class AttendanceController extends Controller
             })->get();
             $absent =  $students->count() - ($Ontime->count() + $Late->count());
         }
+         if(Carbon::now()->format('H') >= 13){
+            $Ontime = Attendance::where('section_id',$params['section'])->whereTime('pm_time_in','<',$timeToPM)->whereDate('created_at',$now)->whereHas('event', function($attendance){
+                $attendance->where('event_name', 'Class Attendance');
+            })->get();
+            $Late = Attendance::where('section_id',$params['section'])->whereTime('pm_time_in','>',$timeToPM)->whereDate('created_at',$now)->whereHas('event', function($attendance){
+                $attendance->where('event_name', 'Class Attendance');
+            })->get();
+            $absent =  $students->count() - ($Ontime->count() + $Late->count());
+        }
+     }
 
 
         return response()->json([
@@ -304,7 +327,8 @@ class AttendanceController extends Controller
             'series' => [[
                 'name'=> 'Total Students',
                 'data'=> [$Ontime->count(),$Late->count(),$absent]]
-            ]
+            ],
+            'Carbon::now()->format()' => Carbon::now()->format('H')
     
     ]);
     }

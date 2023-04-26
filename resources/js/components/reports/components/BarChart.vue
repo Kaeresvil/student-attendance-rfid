@@ -12,6 +12,7 @@
 import VueApexCharts from "vue3-apexcharts";
 import { defineComponent, ref, onMounted, reactive,toRefs } from 'vue';
 import axios from "../../../axios"
+import moment from "moment"
 import { useRouter,useRoute } from 'vue-router'
 export default defineComponent({
     components: {
@@ -43,12 +44,24 @@ export default defineComponent({
             axios.get('/api/page/attendance/BarChart',{params: {...payload}})
                     .then(response => {
                       console.log('sr',response.data)
+                      updateChar(moment().format("A"))
                       series.value = response.data.series
                     })
                     .catch(function(error) {
                         console.log(error);
                     });
 
+                    
+
+          }
+          const updateChar = (data) => {
+            chartOptions.value = {
+              ...chartOptions.value,
+              title: {
+                  text: "Total Students Accumulated at School (Today) " +data,
+                  align: "center",
+                },
+            }
           }
 
           onMounted(index)

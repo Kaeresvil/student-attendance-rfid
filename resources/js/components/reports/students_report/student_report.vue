@@ -410,9 +410,9 @@ export default defineComponent({
         forALL:visible2.value}
             })
         visible2.value = false;
-        formData.value.event_id = ""
-        formData.value.date_format = ""
-        formData.value.date = ""
+        // formData.value.event_id = ""
+        // formData.value.date_format = ""
+        // formData.value.date = ""
         // console.log('dateFrom', dateFrom.value)
         // console.log('dateTo', dateTo.value)
         }

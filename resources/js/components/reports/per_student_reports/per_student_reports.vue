@@ -24,6 +24,7 @@
                         <button class="block uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" @click="this.$router.go(-1)">Back</button>
                     </div>
                 </div>
+                <h4 class="card-title my-auto" style="font-size: 15px; color: #312d2dd9;"> {{ gradeslevel }} </h4>
                 <a-divider />
 
                     <a-row style="margin-bottom: 15px">
@@ -151,6 +152,7 @@ export default defineComponent({
     setup(){
         const router = useRouter()
         const route = useRoute()
+        const gradeslevel = ref()
         const students = ref([])
         const loading = ref(true)
         const form = reactive({
@@ -235,6 +237,15 @@ export default defineComponent({
                     .catch(function(error) {
                         console.log(error);
                     });
+                    if(form.forall === 'true' ){
+                    axios.get(`/api/page/section_show/${form.id}`)
+                    .then(response => {
+                        gradeslevel.value = response.data.grade_level.grade_level + ' - ' + response.data.name
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+                }
         }
 
         const onChange = (payload) => {
@@ -295,7 +306,8 @@ const timeFormat = (value) =>{
         students,
         form,
         loading,
-        columns
+        columns,
+        gradeslevel
     }
 
     }

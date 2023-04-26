@@ -65,7 +65,8 @@
                             <h2  style="font-size: 22px; font-weight: bold; margin-left: 10px;"><i class="stud_in">Arrive Time:</i> {{ form.time }} </h2>
                     </div>
                     <div class="row">
-                        <h2  style="font-size: 22px; font-weight: bold; margin-left: 10px;"><i class="stud_in">Remarks:</i> You arrived 29 minutes and 30 seconds early. </h2>
+                        <h2  v-if="form.attendance_type == 1 && isOntime || form.attendance_type == 2 && isOntime" style="font-size: 22px; font-weight: bold; margin-left: 10px;"><i class="stud_in">Remarks:</i> You arrived {{ hours }} hours and {{ minutes }} minutes early. </h2>
+                        <h2  v-if="form.attendance_type == 1 && !isOntime || form.attendance_type == 2 && !isOntime" style="font-size: 22px; font-weight: bold; margin-left: 10px;"><i class="stud_in">Remarks:</i> You arrived {{ hours }} hours and {{ minutes }} minutes late. </h2>
                     </div>
                     <div class="row justify-content-center">
                       <div style="background-color:#032b5e; color: white; text-align: center; width: 50%; margin-bottom: -13px;font-size: 16px;">STUDENT DETAILS</div>
@@ -139,10 +140,44 @@ console.log(form)
     const preventBlur = ()=>{
         autofocusFields()
     }
+
+    const hours = ref();
+    const minutes = ref();
+    const isOntime = ref(false);
+    
     const parseCode = (e)=>{
         
         form.attendance_date =     moment().format("YYYY-MM-DD h:mm:ss a");
         form.time =  moment().format("LTS");
+
+        var now =  moment().format("YYYY-MM-DD HH:mm:ss");
+        var timeHours =  moment().hour();
+        var timeMinutes =  moment().hour();
+        var time_in_am =  moment().format("YYYY-MM-DD 07:45:ss a");
+        var time_in_pm =  moment().format("YYYY-MM-DD 13:15:ss a");
+
+       var dur_am = moment.utc(moment(now,"YYYY-MM-DD HH:mm:ss").diff(moment(time_in_am,"YYYY-MM-DD HH:mm:ss")))
+       var dur_pm = moment.utc(moment(now,"YYYY-MM-DD HH:mm:ss").diff(moment(time_in_pm,"YYYY-MM-DD HH:mm:ss")))
+
+    if(form.attendance_type === 1){
+        hours.value = moment(dur_am).hour()
+        minutes.value = moment(dur_am).minutes()
+       if (timeHours <= 7 && timeMinutes <= 15){
+        isOntime.value = true
+       }
+    }
+    if(form.attendance_type === 2){
+        hours.value = moment(dur_pm).hour()
+        minutes.value = moment(dur_pm).minutes()
+       if (timeHours <= 13 && timeMinutes <= 15){
+        isOntime.value = true
+       }
+    }
+
+        console.log(form.attendance_type);
+        console.log(hours.value);
+        console.log(minutes.value);
+        console.log(isOntime.value);
         if(form.rfid_code.length == 10){
             axios.get(`/api/getStudent/${form.rfid_code}`)
             .then(response => {
@@ -251,7 +286,10 @@ console.log(form)
         visible_scanner,
         visible_notregistered,
         existing_message,
-        existing
+        existing,
+        isOntime,
+        hours,
+        minutes
     }
 }
 })

@@ -24,8 +24,11 @@ class Student extends Model
     public function prsentToday()
     {
       $now = Carbon::now()->format('Y-m-d');
-      $attendance = Attendance::whereDate('created_at',$now)->where('stud_lrn', $this->lrn)->get();
-
+      if(Carbon::now()->format('H') <= 12){
+      $attendance = Attendance::where('am_time_in','!=', NULL)->whereDate('created_at',$now)->where('stud_lrn', $this->lrn)->get();
+      }else   if(Carbon::now()->format('H') >= 13){
+        $attendance = Attendance::where('pm_time_in','!=', NULL)->whereDate('created_at',$now)->where('stud_lrn', $this->lrn)->get();
+      }
       return $attendance->count() != 0 ? true:false;
     }
 
