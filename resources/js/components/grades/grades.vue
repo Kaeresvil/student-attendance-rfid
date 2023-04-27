@@ -5,7 +5,7 @@
                 <div class="d-flex justify-content-between ">
                     <h4 class="card-title my-auto" style="font-size: 15px; font-weight: bold; color: #312d2dd9;">Grade Level List</h4>
                     <div>
-                        <button class="block uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" @click="this.$router.push('/create/grades')">Add Grade Level</button>
+                        <button class="btn btn-lg buttonback" @click="this.$router.push('/create/grades')">Add Grade Level</button>
                     </div>
                 </div>
                 <a-divider />

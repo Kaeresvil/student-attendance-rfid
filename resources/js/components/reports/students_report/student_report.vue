@@ -24,7 +24,7 @@
                     <h4 class="card-title my-auto" style="font-size: 15px; font-weight: bold; color: #312d2dd9;"> Student Report of {{ this.$route.query.grade }} - {{ this.$route.query.section}} </h4>
 
                     <div>
-                        <button class="block uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" @click="this.$router.go(-1)">Back</button>
+                        <button  class="btn btn-lg buttonback" @click="this.$router.go(-1)">Back</button>
                     </div>
                 </div>
                 <a-divider />

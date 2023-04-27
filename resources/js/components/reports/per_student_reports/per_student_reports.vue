@@ -21,7 +21,7 @@
                     <div class="d-flex justify-content-between ">
                     <h4 class="card-title my-auto" style="font-size: 15px; color: #312d2dd9;"> {{ this.$route.query.event }} Reports ({{ this.$route.query.date_format }}) </h4>
                     <div>
-                        <button class="block uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" @click="this.$router.go(-1)">Back</button>
+                        <button  class="btn btn-lg buttonback" @click="this.$router.go(-1)">Back</button>
                     </div>
                 </div>
                 <h4 class="card-title my-auto" style="font-size: 15px; color: #312d2dd9;"> {{ gradeslevel }} </h4>

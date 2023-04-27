@@ -91,7 +91,7 @@ class EventController extends Controller
         //     'event_description' => 'required'
         // ]);
 
-        // $input = $request->all();
+        $input = $request->all();
         $post->update($input);
 
         return response()->json(['success'=> 'Student Updated Successfully']);

@@ -10,7 +10,7 @@
                     <div class="d-flex justify-content-between ">
                                 <h5 class="card-title">User Profile</h5>
                                 <div>
-                                    <button class="block mr-2 uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" type="button" @click="this.$router.go(-1)">Back</button>
+                                    <button class="btn btn-lg buttonback" disabledtype="button" @click="this.$router.go(-1)">Back</button >
                                 </div>
                             </div>
 
@@ -88,9 +88,9 @@
                             </div>
                             </div>
 
-                            <div class="w-full flex justify-end mt-2">
+                            <div style="display:flex; justify-content: flex-end; margin-top: 10px;">
                                 <div>
-                                    <button class="mr-2 mt-2 uppercase shadow bg-blue-800 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" @click="handling()">Update</button>
+                                    <button  class="btn btn-lg buttonshow" @click="handling()">Update</button>
 
                                 </div>
                             </div>

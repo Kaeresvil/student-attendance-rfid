@@ -15,7 +15,7 @@
                     <div class="d-flex justify-content-between ">
                                 <h5 class="card-title">Create New Sections</h5>
                                 <div>
-                                    <button class="block mr-2 uppercase shadow bg-emerald-800 hover:bg-emerald-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" type="button" @click="this.$router.push('/sections')">Back</button>
+                                    <button class="btn btn-lg buttonback" type="button" @click="this.$router.push('/sections')">Back</button>
                                 </div>
                             </div>
 
@@ -42,11 +42,11 @@
                                         </a-select>
                                     </a-form-item>
                                 </div>
-                                <div class="w-full flex justify-end">
-                                    <div>
-                                        <button type="submit" class="mr-2 mt-2 uppercase shadow bg-blue-800 hover:bg-blue-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" @click="handling()">{{$route.path.includes('edit') ? 'Update':'Create'}}</button>
+                                <div style="display:flex; justify-content: flex-end; margin-top: 10px;">
+                                <div>
+                                    <button style="margin-right: 5px;" class="btn btn-lg buttonshow" @click="handling()">{{$route.path.includes('edit') ? 'Update':'Create'}}</button>
 
-                                        <button v-if="$route.path.includes('edit')" type="submit" class="mr-2 mt-2 uppercase shadow bg-red-800 hover:bg-red-700 focus:shadow-outline focus:outline-none text-white text-sm py-2 px-4 rounded" @click="deleteRecord($route.params.id)">Delete</button>
+                                        <button v-if="$route.path.includes('edit')" type="submit" class="btn btn-lg buttondelete" @click="deleteRecord($route.params.id)">Delete</button>
                                     </div>
                                 </div>          
                         </form>

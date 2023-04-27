@@ -1,80 +1,91 @@
 <template>
-    <div class="container">
+    <div class="main">
+      <div style="padding-bottom: 100px">
+        <div class="login-logo">
+          <img class="center" style="width:300px;" src="/img/RFIDLOGO.png" />
+        </div>
+        <div
+          class="section"
+          style="
+            padding: 25px;
+            border-radius: 1rem;
+            min-width: 400px;
+            box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+          "
+        >
+          <h4 class="card-title text-center mb-2" id="login">
+            Sign in to start your session
+          </h4>
 
-        <div class="row d-flex justify-content-center align-items-center jutify-content-center">
-            <div class="col-md-8">
-
-               
-                
-                <div class="min-h-screen flex flex-col items-center justify-center bg-gray-300">
-                    <div class="mb-10">
-                        <img class="lg:w-56 lg:h-56 sm:w-32 sm:w-32 rounded-md overflow-hidden" src="/img/RFIDLOGO.png"/>
-                    </div>
-                    <div class="flex flex-col bg-white shadow-md px-4 sm:px-6 md:px-8 lg:px-10 py-8 rounded-md w-full max-w-md">
-                        <div class="">
-                            <form>
-                                <div v-if="error !== null" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <div v-if="error !== null" class="alert alert-danger alert-dismissible fade show" role="alert">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 
                                     <strong>{{error}}</strong>
                                 </div>
-                                <div class="flex flex-col mb-6">
-                                    <label for="email" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">E-Mail Address:</label>
-                                    <div class="relative">
-                                        <div class="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
-                                            <svg class="h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                                            </svg>
-                                        </div>
-                                        <input id="email" type="email" class="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" v-model="email" required autofocus autocomplete="off" placeholder="E-Mail Address">
-                                    </div>
-                                </div>
-                                <div class="flex flex-col mb-6">
-                                    <label for="password" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Password:</label>
-                                    <div class="relative">
-                                        <div class="inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400">
-                                            <span>
-                                                <svg class="h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                                </svg>
-                                            </span>
-                                        </div>
-                                        <input id="password" type="password" class="text-sm sm:text-base placeholder-gray-500 pl-10 pr-4 rounded-lg border border-gray-400 w-full py-2 focus:outline-none focus:border-blue-400" v-model="password" required autocomplete="off" placeholder="Password">
-                                    </div>
-                                </div>
+          <div>
+            <span
+              style="color: red; display: flex; margin-bottom: 10px"
+              v-for="(error, index) in errors"
+              :key="index"
+            >
+              {{ error[0] }}
+            </span>
+          </div>
+          <a-form
+            id="components-form-demo-normal-login"
+            :model="userState"
+            :labelCol="{ span: 30 }"
+            :wrapperCol="{ span: 25 }"
+            @finish="handleFinish"
+          >
+            <a-form-item>
+              <a-input
+                type="email"
+                placeholder="Email"
+                v-model:value="email"
+                required
+              >
+                <template #prefix>
+                  <UserOutlined style="color: rgba(0, 0, 0, 0.25)" />
+                </template>
+              </a-input>
+            </a-form-item>
+  
+            <a-form-item>
+              <a-input
+                type="password"
+                placeholder="Password"
+                v-model:value="password"
+                required
+              >
+                <template #prefix>
+                  <LockOutlined style="color: rgba(0, 0, 0, 0.25)" />
+                </template>
+              </a-input>
+            </a-form-item>
+  
+            <a-form-item>
+              <a-button
+                class="login-form-button"
+                @click="handleSubmit"
+                type="primary"
+                :loading="issubmit"
+              >
+                Sign In
+              </a-button>
 
-                                <!-- <div class="flex items-center mb-6 -mt-4">
-                                    <div class="flex ml-auto">
-                                        <a href="#" class="inline-flex text-xs sm:text-sm text-blue-500 hover:text-blue-700">Forgot Your Password?</a>
-                                    </div>
-                                </div> -->
-
-                                <div class="flex justify-center items-center">
-                                    <!-- <a-button type="submit" @click="handleSubmit" class="flex items-center justify-center focus:outline-none text-white text-sm sm:text-base bg-blue-600 hover:bg-blue-700 rounded py-2 w-full transition duration-150 ease-in">
-                                        <span class="mr-2 uppercase">Login</span>
-                                        <span>
-                                            <svg class="h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                        </span>
-                                    </a-button> -->
-
-                                    <a-button type="primary" @click="handleSubmit" :loading="issubmit">Login</a-button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="flex justify-center items-center mt-6">
-                            <a @click="system()" target="_blank" class="cursor-pointer inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center">
+              <div style="text-align: center; margin-top: 10px">
+                <a @click="system()" target="_blank" class="cursor-pointer inline-flex items-center font-bold text-blue-500 hover:text-blue-700 text-xs text-center">
                                 <span class="ml-2">Attendance System</span>
                             </a>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
+
+            </a-form-item>
+          </a-form>
         </div>
+      </div>
     </div>
-</template>
+  </template>
 
 <script>
 import axios from "../axios"
@@ -148,3 +159,57 @@ import Swal from "sweetalert2";
         }
     }
 </script>
+
+<style lang="css" scoped>
+html,
+body {
+  margin: 0px;
+  height: 100%;
+}
+
+.login-logo {
+  font-size: 25px;
+  align-items: center;
+  margin-bottom: 25px;
+  font-weight: 300;
+}
+
+.login-logo a {
+  color: #444;
+}
+
+.main {
+  width: 100%;
+  height: 100vh;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d2d6de;
+}
+
+.section {
+  color: #fff;
+  background: #2d2d2d;
+  padding: 12px;
+  margin-right: 4px;
+  min-width: 400px;
+  background: red;
+  padding: 25px;
+  background-color: #fff;
+}
+
+.login-form-button {
+  width: 100%;
+  background-color: #3c8dbc;
+  color: white;
+  font-weight: 300;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
