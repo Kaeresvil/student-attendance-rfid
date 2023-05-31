@@ -85,7 +85,7 @@
                                 <div>
                                     <button style="margin-right: 5px;" class="btn btn-lg buttonshow" @click="handling()">{{$route.path.includes('edit') ? 'Update':'Register'}}</button>
 
-                                    <button v-if="$route.path.includes('edit')" class="btn btn-lg buttondelete" @click="deleteRecord($route.params.id)">Delete</button>
+                                    <button v-if="$route.path.includes('edit') && form.role_type_id != 1" class="btn btn-lg buttondelete" @click="deleteRecord($route.params.id)">Delete</button>
                                 </div>
                             </div>
 

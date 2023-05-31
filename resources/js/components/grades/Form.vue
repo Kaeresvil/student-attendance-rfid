@@ -50,9 +50,11 @@
 </template>
 
 <script>
-import { defineComponent, ref, onMounted, reactive } from 'vue';
+import { defineComponent, ref, onMounted, reactive, createVNode } from 'vue';
 import axios from "../../axios"
 import { useRoute, useRouter} from 'vue-router'
+import { Modal } from 'ant-design-vue';
+import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
 import Swal from "sweetalert2";
 
 export default defineComponent({
@@ -100,8 +102,17 @@ setup(){
     }
 
     const deleteRecord = (id) =>{
-                axios.delete(`/api/page/grade_level_delete/${id}`)
+
+
+        Modal.confirm({
+        title: 'Reminder!',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: 'If you delete this grade level all attendance reports, students that is tag to this grade level will also be deleted.',
+        onOk() {
+          return new Promise((resolve, reject) => {
+            axios.delete(`/api/page/grade_level_delete/${id}`)
                 .then(response => {
+                    setTimeout(Math.random() > 0.5 ? resolve : reject, 500);
                     Swal.fire({
                     icon: "success",
                     title: response.data.success,
@@ -112,6 +123,13 @@ setup(){
                 .catch(function(error) {
                         console.log(error)
                 });
+
+          }).catch(() => console.log('Oops errors!'));
+        },
+
+        onCancel() {},
+      });
+               
     }
  
 

@@ -25,7 +25,7 @@ export default defineComponent({
               height: 500,
               type: 'pie',
             },
-            labels: ["On Time", "Late"],
+            labels: ["On Time AM", "Late AM", "On Time PM", "Late PM"],
             theme: {
               monochrome: {
                 enabled: true
@@ -65,7 +65,6 @@ export default defineComponent({
             axios.get('/api/page/attendance/PieChart',{params: {...payload}})
                     .then(response => {
                       series.value = response.data.series
-                      console.log('res',response.data)
                     })
                     .catch(function(error) {
                         console.log(error);

@@ -4,6 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\GradeLevel;
+use App\Models\Section;
+use App\Models\UserSection;
+use App\Models\Student;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 
 class GradeLevelController extends Controller
@@ -80,6 +84,16 @@ class GradeLevelController extends Controller
     public function delete($id)
     {
         $post = GradeLevel::find($id);
+        $section = Section::where('grade_level_id', $post->id)->get();
+        $section_id = $section->pluck('id');
+
+        Section::whereIn('id',$section_id)->delete();
+        UserSection::whereIn('section_id',$section_id)->delete();
+        $students = Student::whereIn('grade_section_id',$section_id)->get();
+        $students_lrn = $students->pluck('lrn');
+        Student::whereIn('grade_section_id',$section_id)->delete();
+        Attendance::whereIn('stud_lrn', $students_lrn)->delete();
+
         $post->delete();
         return response()->json(['success'=> 'Grade Level Deleted Successfully']);
 

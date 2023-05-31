@@ -4,6 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Section;
+use App\Models\UserSection;
+use App\Models\Student;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -136,6 +139,14 @@ class SectionController extends Controller
     public function delete($id)
     {
         $post = Section::find($id);
+
+
+        UserSection::where('section_id',$post->id)->delete();
+        $students = Student::where('grade_section_id',$post->id)->get();
+        $students_lrn = $students->pluck('lrn');
+        Student::where('grade_section_id',$post->id)->delete();
+        Attendance::whereIn('stud_lrn', $students_lrn)->delete();
+
         $post->delete();
         return response()->json(['success'=> 'Section Deleted Successfully']);
 

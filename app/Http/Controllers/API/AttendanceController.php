@@ -242,29 +242,54 @@ class AttendanceController extends Controller
         $params = $request->all();
         $dateFrom = Carbon::now()->startOfMonth()->format('Y-m-d');
         $dateTo = Carbon::now()->endOfMonth()->format('Y-m-d');
+        $month = Carbon::now()->format('m');
         $timeTo ='07:45:00';
+        $timeToPM ='13:15:00';
         $students = Student::all();
             if($params['type'] === 'reports'){
-                $Ontime = Attendance::whereTime('am_time_in','<',$timeTo)->whereBetween('created_at',[ $dateFrom, $dateTo])->whereHas('event', function($attendance){
+                $OntimeAM = Attendance::whereTime('am_time_in','<',$timeTo)->whereMonth('created_at',$month)->whereHas('event', function($attendance){
                     $attendance->where('event_name', 'Class Attendance');
                 })->get();
-                $Late = Attendance::whereTime('am_time_in','>',$timeTo)->whereBetween('created_at',[ $dateFrom, $dateTo])->whereHas('event', function($attendance){
+
+                $OntimePM = Attendance::whereTime('pm_time_in','<',$timeToPM)->whereMonth('created_at',$month)->whereHas('event', function($attendance){
                     $attendance->where('event_name', 'Class Attendance');
                 })->get();
+
+
+                $LateAM = Attendance::whereTime('am_time_in','>',$timeTo)->whereMonth('created_at',$month)->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+
+                $LatePM = Attendance::whereTime('pm_time_in','>',$timeToPM)->whereMonth('created_at',$month)->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+
             }else if($params['type'] === 'students-reports'){
-                $Ontime = Attendance::where('section_id',$params['section'])->whereTime('am_time_in','<',$timeTo)->whereBetween('created_at',[ $dateFrom, $dateTo])->whereHas('event', function($attendance){
+
+                $OntimeAM = Attendance::where('section_id',$params['section'])->whereTime('am_time_in','<',$timeTo)->whereMonth('created_at',$month)->whereHas('event', function($attendance){
                     $attendance->where('event_name', 'Class Attendance');
                 })->get();
-                $Late = Attendance::where('section_id',$params['section'])->whereTime('am_time_in','>',$timeTo)->whereBetween('created_at',[ $dateFrom, $dateTo])->whereHas('event', function($attendance){
+
+                $OntimePM = Attendance::where('section_id',$params['section'])->whereTime('pm_time_in','<',$timeToPM)->whereMonth('created_at',$month)->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+
+                $LateAM = Attendance::where('section_id',$params['section'])->whereTime('am_time_in','>',$timeTo)->whereMonth('created_at',$month)->whereHas('event', function($attendance){
+                    $attendance->where('event_name', 'Class Attendance');
+                })->get();
+
+                $LatePM = Attendance::where('section_id',$params['section'])->whereTime('pm_time_in','>',$timeToPM)->whereMonth('created_at',$month)->whereHas('event', function($attendance){
                     $attendance->where('event_name', 'Class Attendance');
                 })->get();
             }
 
 
-
         return response()->json([
             'success'=> 'Student Updated Successfully', 
-            'series' => [$Ontime->count(),$Late->count(),],
+            'series' => [$OntimeAM->count(),$LateAM->count(), $OntimePM->count(),$LatePM->count()],
+            'laet' => $LateAM = Attendance::whereTime('am_time_in','>',$timeTo)->whereMonth('created_at',$month)->whereHas('event', function($attendance){
+                $attendance->where('event_name', 'Class Attendance');
+            })->get()
     
     ]);
     }
@@ -324,6 +349,7 @@ class AttendanceController extends Controller
         return response()->json([
             'success'=> 'Student Updated Successfully', 
             '$now'=> $now, 
+            '$cou'=> $students->count(), 
             'series' => [[
                 'name'=> 'Total Students',
                 'data'=> [$Ontime->count(),$Late->count(),$absent]]
