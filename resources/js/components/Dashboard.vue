@@ -11,7 +11,12 @@
                 <router-link to="/students" class="nav-item nav-link text-dark">Students</router-link>
                 <router-link v-if="isHeadTeacher || isAdmin" to="/events" class="nav-item nav-link text-dark">Events</router-link>
                 <router-link to="/reports" class="nav-item nav-link text-dark">Reports/Attendance</router-link>
-                <div class="dropdown">
+                <router-link to="/roles" class="nav-item nav-link text-dark">Roles</router-link>
+                <router-link to="/grades" class="nav-item nav-link text-dark">Grade Level</router-link>
+                <router-link to="/sections" class="nav-item nav-link text-dark">Sections</router-link>
+                <router-link to="/users" class="nav-item nav-link text-dark">Users</router-link>
+                <a @click="editRecord" to='' class="nav-item nav-link text-dark">{{authUser.name}} (Profile)</a>
+                <!-- <div class="dropdown">
                 <a  class="nav-item nav-link text-dark dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     Settings
                 </a>
@@ -23,7 +28,7 @@
                     <li> <router-link v-if="isAdmin" to="/grades" class="dropdown-item">Grade Level</router-link></li>
                     <li> <router-link v-if="isAdmin" to="/sections" class="dropdown-item">Sections</router-link></li>
                 </ul>
-                </div>
+                </div> -->
                 <a class="nav-item nav-link " style="cursor: pointer; font-size: 17px; font-weight: 900; " @click="logout">LOGOUT</a>
             </div>
 
@@ -135,7 +140,7 @@ setup(props){
 .nav-item  {
 color: #0e0e0e;
 font-weight: bold;
-font-size: 17px;
+font-size: 15px;
 }
 .navbar-expand-sm .navbar-nav .nav-link {
     padding-right: 20px;
