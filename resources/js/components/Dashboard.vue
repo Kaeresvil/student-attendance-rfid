@@ -11,10 +11,10 @@
                 <router-link to="/students" class="nav-item nav-link text-dark">Students</router-link>
                 <router-link v-if="isHeadTeacher || isAdmin" to="/events" class="nav-item nav-link text-dark">Events</router-link>
                 <router-link to="/reports" class="nav-item nav-link text-dark">Reports/Attendance</router-link>
-                <router-link to="/roles" class="nav-item nav-link text-dark">Roles</router-link>
-                <router-link to="/grades" class="nav-item nav-link text-dark">Grade Level</router-link>
-                <router-link to="/sections" class="nav-item nav-link text-dark">Sections</router-link>
-                <router-link to="/users" class="nav-item nav-link text-dark">Users</router-link>
+                <router-link  v-if="isAdmin" to="/roles" class="nav-item nav-link text-dark">Roles</router-link>
+                <router-link  v-if="isAdmin" to="/grades" class="nav-item nav-link text-dark">Grade Level</router-link>
+                <router-link  v-if="isAdmin" to="/sections" class="nav-item nav-link text-dark">Sections</router-link>
+                <router-link  v-if="isAdmin" to="/users" class="nav-item nav-link text-dark">Users</router-link>
                 <a @click="editRecord" to='' class="nav-item nav-link text-dark">{{authUser.name}} (Profile)</a>
                 <!-- <div class="dropdown">
                 <a  class="nav-item nav-link text-dark dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
