@@ -15,20 +15,20 @@
                 <router-link  v-if="isAdmin" to="/grades" class="nav-item nav-link text-dark">Grade Level</router-link>
                 <router-link  v-if="isAdmin" to="/sections" class="nav-item nav-link text-dark">Sections</router-link>
                 <router-link  v-if="isAdmin" to="/users" class="nav-item nav-link text-dark">Users</router-link>
-                <a @click="editRecord" to='' class="nav-item nav-link text-dark">{{authUser.name}} (Profile)</a>
-                <!-- <div class="dropdown">
+                <!-- <a @click="editRecord" to='' class="nav-item nav-link text-dark">{{authUser.name}} (Profile)</a> -->
+                <div class="dropdown">
                 <a  class="nav-item nav-link text-dark dropdown-toggle " href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     Settings
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuLink">
                     <li> <a @click="editRecord" to='' class="dropdown-item">{{authUser.name}} (Profile)</a></li>
-                    <li> <router-link v-if="isAdmin"  to="/users" class="dropdown-item">Users</router-link></li>
+                    <!-- <li> <router-link v-if="isAdmin"  to="/users" class="dropdown-item">Users</router-link></li>
                     <li> <router-link v-if="isAdmin" to="/roles" class="dropdown-item">Roles</router-link></li>
                     <li> <router-link v-if="isAdmin" to="/grades" class="dropdown-item">Grade Level</router-link></li>
-                    <li> <router-link v-if="isAdmin" to="/sections" class="dropdown-item">Sections</router-link></li>
+                    <li> <router-link v-if="isAdmin" to="/sections" class="dropdown-item">Sections</router-link></li> -->
                 </ul>
-                </div> -->
+                </div>
                 <a class="nav-item nav-link " style="cursor: pointer; font-size: 17px; font-weight: 900; " @click="logout">LOGOUT</a>
             </div>
 
